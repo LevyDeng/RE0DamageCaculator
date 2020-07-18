@@ -4,8 +4,8 @@
     <table>
       <tr>
         <td><el-checkbox v-model="xinzhiqiData.checked" v-if="xinzhiqiData.id!=-1"></el-checkbox></td>
-        <td v-if="xinzhiqiData.id!=-1"><el-button @click="save" type="primary" plain>保存</el-button><span v-if="saveSuccess==false" style="color:red;font-size:12px">保存失败</span></td>
-        <td v-if="xinzhiqiData.id==-1"><el-button @click="save" type="success">新建</el-button></td>
+        <td v-if="xinzhiqiData.id!=-1"><el-button @click="save" type="success" plain>保存</el-button><span v-if="saveSuccess==false" style="color:red;font-size:12px">保存失败</span></td>
+        <td v-if="xinzhiqiData.id==-1"><el-button @click="save" type="primary">新建</el-button></td>
       </tr>
       <tr>
         <td>名称</td>
@@ -27,7 +27,7 @@
       <tr>
 
       </tr>
-      <tr><el-button type="danger" icon="el-icon-delete" circle></el-button></tr>
+      <tr><el-button v-if="xinzhiqiData.id!=-1" type="danger" icon="el-icon-delete" circle @click="remove"></el-button></tr>
     </table>
   </div>
 </template>
@@ -82,18 +82,23 @@ export default {
         } else {
           this.xinzhiqis.push({
             name: this.$refs.name.value,
+            id: this.currentID+1,
             attack: this.$refs.attack.value,
             checked: false,
             properties: p
           })
-          this.$root.$data.num += 1
+          this.currentID+=1
         }
       } else {
           this.saveSuccess = false
       }
     },
     remove: function() {
-      
+      for (var i in this.xinzhiqis) {
+        if (this.xinzhiqis[i].id==this.xinzhiqiData.id) {
+          this.xinzhiqis.splice(i,1)
+        }
+      }
     },
     isValid: function(label,input) {
       if (isNaN(input)) {
@@ -134,12 +139,11 @@ export default {
       inputErrors: [],
       errorMsg: "值必须为数字",
       xinzhiqis: this.$root.$data.xinzhiqis,
-      xinzhiqiData: this.xinzhiqiData_raw[0],
-      index: this.xinzhiqiData_raw[1]
+      currentID: this.$root.$data.currentID
     }
   },
   props: {
-    xinzhiqiData_raw: []
+    xinzhiqiData: Object
   },
 }
 </script>

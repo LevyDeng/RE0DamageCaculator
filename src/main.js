@@ -7,7 +7,7 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false
 
 var globalData = {
-  num: 0,
+  currentID: 0,
   damage: 0,
   characterData: {
     "基础攻击": 0,
@@ -29,7 +29,8 @@ var globalData = {
   },
   xinzhiqis: [
     {
-      name: "从天而降的美好祝福", 
+      name: "从天而降的美好祝福",
+      id: 0,
       attack: 366,
       checked: false,
       properties: {
