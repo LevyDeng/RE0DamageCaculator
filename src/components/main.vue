@@ -21,9 +21,9 @@
         <el-row :gutter="10">
           <el-col></el-col>
           <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="6" v-for="x in xinzhiqis" :key="x.id">
-            <xinzhiqi :xinzhiqiData="x"></xinzhiqi>
+            <xinzhiqi :xinzhiqiData_raw="[x,x.id]"></xinzhiqi>
           </el-col>
-          <el-col :span="8">
+          <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="6" :span="8">
             <xinzhiqi :xinzhiqiData="{
               name: '新建心之器',
               id: -1,

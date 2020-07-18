@@ -134,11 +134,12 @@ export default {
       inputErrors: [],
       errorMsg: "值必须为数字",
       xinzhiqis: this.$root.$data.xinzhiqis,
+      xinzhiqiData: this.xinzhiqiData_raw[0],
+      index: this.xinzhiqiData_raw[1]
     }
   },
   props: {
-    xinzhiqiData: {
-    }
+    xinzhiqiData_raw: []
   },
 }
 </script>
