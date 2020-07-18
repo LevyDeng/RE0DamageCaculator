@@ -37,7 +37,6 @@ export default {
     save: function() {
       var ALLVALID = true
       var p = {}
-      console.log(this.propertiesNum)
       for (var i=0; i<this.propertiesNum; i++) {
         var label = this.$refs['select'+i.toString()][0].value
         var value = this.$refs["input"+i][0].value
@@ -60,13 +59,7 @@ export default {
       if (isNaN(input)) {
         return false
       } else {
-        var min = this.inputRange[label][0]
-        var max = this.inputRange[label][1]
-        if (input >= min && input <= max ) {
-          return true
-        } else {
-          return false
-        }
+        return true
       }
     }
   },
@@ -83,7 +76,8 @@ export default {
         "必杀技伤害": 0,
         "--None--": 0
       },
-      inputRange: {
+      //数据取值范围
+      /* inputRange: {
         "基础攻击":[0,100],
         "暴击几率":[0,1],
         "连击几率":[0,1],
@@ -94,6 +88,7 @@ export default {
         "必杀技伤害":[0,100],
         "--None--": [0,0]
       },
+    */
       inputErrors: [],
       saveError: Boolean
     }
