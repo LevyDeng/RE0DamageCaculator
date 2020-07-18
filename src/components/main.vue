@@ -18,8 +18,9 @@
       </el-main>
       <el-header>心之器</el-header>
       <el-main>
-        <el-row :gutter="10" :key="this.$root.$data.xinzhiqiKey">
-          <el-col :span="8" v-for="(x,k) in xinzhiqis" :key="k">
+        <el-row :gutter="10">
+          <el-col></el-col>
+          <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="6" v-for="x in xinzhiqis" :key="x.id">
             <xinzhiqi :xinzhiqiData="x"></xinzhiqi>
           </el-col>
           <el-col :span="8">
@@ -37,6 +38,7 @@
           </el-col>
         </el-row>
       </el-main>
+      <el-main><el-button type="danger" @click="uncheckAll">全部取消勾选</el-button></el-main>
       <el-header>魔法器</el-header>
       <el-main>
         
@@ -64,13 +66,19 @@ export default {
       return this.characterData['基础攻击']
     }
   },
+  methods: {
+    uncheckAll: function() {
+      for (var x in this.xinzhiqis) {
+        this.xinzhiqis[x].checked = false
+      }
+    }
+  },
   data () {
     return {
       checkList: [],
       xinzhiqis: this.$root.$data.xinzhiqis,
       characterData: this.$root.$data.characterData,
-      mofaqi: this.$root.$data.mofaqi,
-      xinzhjiqiKey: this.$root.$data.xinzhjiqiKey
+      mofaqi: this.$root.$data.mofaqi
     }
   }
 }
@@ -110,5 +118,10 @@ export default {
   
   .el-container:nth-child(7) .el-aside {
     line-height: 320px;
+  }
+
+  table {
+    background-color:antiquewhite;
+    border: 5px solid white;
   }
 </style>

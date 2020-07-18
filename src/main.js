@@ -7,7 +7,6 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false
 
 var globalData = {
-  xinzhjiqiKey: 0,
   num: 0,
   damage: 0,
   characterData: {
@@ -28,20 +27,18 @@ var globalData = {
     "额外攻击力_固定": 142,
     "额外攻击力_百分比": 0.0
   },
-  xinzhiqis: {
-    "0": {
-      name: "成长与归途",
-      id: 0,
-      attack: 0,
+  xinzhiqis: [
+    {
+      name: "从天而降的美好祝福", 
+      attack: 366,
       checked: false,
       properties: {
-        "基础攻击": 0.1,
-        "暴击几率": 0.09,
-        "连击几率": 0.09,
-        "必杀技伤害": 0.18
+        "基础攻击": 0.12,
+        "暴击几率": 0.18,
+        "防御忽视": 0.15
       }
     }
-  },
+  ],
   mofaqi: {
     "基础攻击": 0,
     "暴击几率": 0,

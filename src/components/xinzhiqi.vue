@@ -1,10 +1,11 @@
 <template>
   <div id="xinzhiqi">
-    <table border="">
+    <br>
+    <table>
       <tr>
-        <td><el-checkbox border :checked="xinzhiqiData.checked"></el-checkbox></td>
-        <td v-if="xinzhiqiData.id!=-1"><el-button @click="save">保存</el-button><span v-if="saveSuccess==false" style="color:red;font-size:12px">保存失败</span></td>
-        <td v-if="xinzhiqiData.id==-1"><el-button @click="save">新建</el-button></td>
+        <td><el-checkbox v-model="xinzhiqiData.checked" v-if="xinzhiqiData.id!=-1"></el-checkbox></td>
+        <td v-if="xinzhiqiData.id!=-1"><el-button @click="save" type="primary" plain>保存</el-button><span v-if="saveSuccess==false" style="color:red;font-size:12px">保存失败</span></td>
+        <td v-if="xinzhiqiData.id==-1"><el-button @click="save" type="success">新建</el-button></td>
       </tr>
       <tr>
         <td>名称</td>
@@ -23,7 +24,10 @@
         <td><input :value="v" :ref="'input'+i">
         <div v-if="inputErrors[i]==true"><span style="color:red;font-size:12px">{{errorMsg}}</span></div></td>
       </tr>
-      <tr><el-button>删除</el-button></tr>
+      <tr>
+
+      </tr>
+      <tr><el-button type="danger" icon="el-icon-delete" circle></el-button></tr>
     </table>
   </div>
 </template>
@@ -42,12 +46,15 @@ export default {
   methods: {
     save: function() {
       var ALLVALID = true
+      var x = {}
       var p = {}
       //初始化错误信息
       this.attackValid=true
         if (isNaN(this.$refs.attack.value)) {
           this.attackValid=false
           ALLVALID=false
+        } else {
+          x.attack = this.$refs.attack.value
         }
 
       this.inputErrors=[]
@@ -73,20 +80,20 @@ export default {
           this.xinzhiqiData.properties=p
           this.saveSuccess=true
         } else {
-          var newid = this.$root.$data.num+1
-          this.$root.$data.xinzhiqis[newid]={
-            id: newid,
+          this.xinzhiqis.push({
             name: this.$refs.name.value,
             attack: this.$refs.attack.value,
             checked: false,
             properties: p
-          }
+          })
           this.$root.$data.num += 1
-          this.$root.$data.xinzhiqiKey += 1
         }
       } else {
           this.saveSuccess = false
       }
+    },
+    remove: function() {
+      
     },
     isValid: function(label,input) {
       if (isNaN(input)) {
@@ -125,7 +132,8 @@ export default {
       saveSuccess: true,
       attackValid: true,
       inputErrors: [],
-      errorMsg: "值必须为数字"
+      errorMsg: "值必须为数字",
+      xinzhiqis: this.$root.$data.xinzhiqis,
     }
   },
   props: {
@@ -134,3 +142,9 @@ export default {
   },
 }
 </script>
+
+<style>
+  .xinzhiqi {
+    width: 20;
+  }
+</style>
