@@ -7,6 +7,7 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false
 
 var globalData = {
+  xinzhjiqiKey: 0,
   num: 0,
   damage: 0,
   characterData: {

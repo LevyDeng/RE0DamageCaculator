@@ -18,7 +18,7 @@
       </el-main>
       <el-header>心之器</el-header>
       <el-main>
-        <el-row :gutter="10">
+        <el-row :gutter="10" :key="this.$root.$data.xinzhiqiKey">
           <el-col :span="8" v-for="(x,k) in xinzhiqis" :key="k">
             <xinzhiqi :xinzhiqiData="x"></xinzhiqi>
           </el-col>
@@ -59,11 +59,6 @@ export default {
   components: {
     xinzhiqi
   },
-  methods: {
-    isValid: function() {
-      
-    }
-  },
   computed: {
     damage: function() {
       return this.characterData['基础攻击']
@@ -74,7 +69,8 @@ export default {
       checkList: [],
       xinzhiqis: this.$root.$data.xinzhiqis,
       characterData: this.$root.$data.characterData,
-      mofaqi: this.$root.$data.mofaqi
+      mofaqi: this.$root.$data.mofaqi,
+      xinzhjiqiKey: this.$root.$data.xinzhjiqiKey
     }
   }
 }

@@ -30,6 +30,8 @@
 
 <script>
 //import func from '../../vue-temp/vue-editor-bridge'
+
+
 export default {
   name: 'xinzhiqi',
   computed: {
@@ -80,6 +82,7 @@ export default {
             properties: p
           }
           this.$root.$data.num += 1
+          this.$root.$data.xinzhiqiKey += 1
         }
       } else {
           this.saveSuccess = false
