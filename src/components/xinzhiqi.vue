@@ -14,37 +14,60 @@
         <td>攻击力:</td>
         <td><input :value="xinzhiqiData.attack"></td>
       </tr>
-      <tr v-for="d in trans_data" :key="d.id">
-        <td><select>
-            <option v-for="(v0,k0) in x_properties" :key="k0" :selected="k==k0 ? true : false">{{k}}</option>
+      <tr v-for="(v,k,i) in xinzhiqiData.properties" :key="k">
+        <td><select :ref="'select'+i">
+            <option v-for="(v0,k0) in x_properties" :key="k0" :selected="k==k0 ? true : false">{{k0}}</option>
           </select></td>
-        <td><input :value="v"></td>
+        <td><input :value="v" :ref="'input'+i"></td>
       </tr>
     </table>
   </div>
 </template>
 
 <script>
+//import func from '../../vue-temp/vue-editor-bridge'
 export default {
   name: 'xinzhiqi',
-  methods: {
-    save: function() {
-
+  computed: {
+    propertiesNum: function() {
+      return Object.keys(this.xinzhiqiData.properties).length
     }
   },
-  computed: {
-    trans_data: function(data){
-      var t = []
-      var i = 0
-      for ( var k in Object.keys(data) ) {
-        t.push({
-          id: i,
-          label: k,
-          value: data[k] 
-        })
-        i = i+1
+  methods: {
+    save: function() {
+      var ALLVALID = true
+      var p = {}
+      console.log(this.propertiesNum)
+      for (var i=0; i<this.propertiesNum; i++) {
+        var label = this.$refs['select'+i.toString()][0].value
+        var value = this.$refs["input"+i][0].value
+        if (this.isValid(label, value)) {
+          p[label]=value
+          this.inputErrors[i]=false
+        } else {
+          this.inputErrors[i]=true
+          ALLVALID=false
+        }
       }
-      return t
+      if (ALLVALID == true) {
+        this.xinzhiqiData.properties=p
+        this.saveError=false
+      } else {
+        this.saveError = true
+      }
+    },
+    isValid: function(label,input) {
+      if (isNaN(input)) {
+        return false
+      } else {
+        var min = this.inputRange[label][0]
+        var max = this.inputRange[label][1]
+        if (input >= min && input <= max ) {
+          return true
+        } else {
+          return false
+        }
+      }
     }
   },
   data () {
@@ -57,8 +80,22 @@ export default {
         "连击伤害": 0,
         "伤害加成": 0,
         "防御忽视": 0,
-        "必杀技伤害": 0
-      }
+        "必杀技伤害": 0,
+        "--None--": 0
+      },
+      inputRange: {
+        "基础攻击":[0,100],
+        "暴击几率":[0,1],
+        "连击几率":[0,1],
+        "暴击伤害":[0,100],
+        "连击伤害":[0,100],
+        "伤害加成":[0,100],
+        "防御忽视":[0,1],
+        "必杀技伤害":[0,100],
+        "--None--": [0,0]
+      },
+      inputErrors: [],
+      saveError: Boolean
     }
   },
   props: {
