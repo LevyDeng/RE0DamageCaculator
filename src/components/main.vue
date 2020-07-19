@@ -7,7 +7,7 @@
       <el-main>
         <table>
           <tr v-for="(v,k) in characterData" :key="k">
-            <td>{{k+':'}}</td>
+            <td><span v-if="k != '攻击力'">{{k+':'}}</span><span v-if="k == '攻击力'">额外攻击力</span></td>
             <td><el-input v-model="characterData[k]" type="number" step=0.001 @mousewheel.native.prevent @DOMMouseScroll.native.prevent></el-input></td>
           </tr>
           <tr>
@@ -54,20 +54,31 @@ export default {
   computed: {
     damage: function() {
       var finalData = JSON.parse(JSON.stringify(this.characterData))
+      //将所有值转换为数字
       for (var key in finalData) {
         finalData[key] = Number(finalData[key])
       }
       finalData["攻击力"]=0
+      if (this.checkedXinzhiqiIDs.length!=0) {
+        for (var i in this.checkedXinzhiqiIDs) {
+          for (var x in this.xinzhiqis) {
+            if (this.xinzhiqis[x].id==this.checkedXinzhiqiIDs[i]) {
+              finalData["攻击力"]+=Number(this.xinzhiqis[x].attack)
+            }
+          }
+        }
+      }
       for (key in finalData) {
         //加上心之器数据
-        for (var id in this.checkedXinzhiqiIDs) {
-          for (var x in this.xinzhiqis) {
-            if (x.id==id) {
-              
-              if (key in x.properties){
-                finalData[key] += Number(x.properties[key])
+          if (this.checkedXinzhiqiIDs.length!=0) {
+            for (i in this.checkedXinzhiqiIDs) {
+              for (x in this.xinzhiqis) {
+                if (this.xinzhiqis[x].id==this.checkedXinzhiqiIDs[i]) {
+                  if (key in this.xinzhiqis[x].properties){
+                    finalData[key] += Number(this.xinzhiqis[x].properties[key])
+                  }
+                }
               }
-            }
           }
         }
         //加上魔法器数据
@@ -75,7 +86,9 @@ export default {
           finalData[key] += Number(this.mofaqi[key])
         }
       }
-      return finalData
+      //伤害公式
+      var damage = (finalData["基础攻击力"]*(1+finalData["攻击力_百分比"])+finalData["攻击力"])*(1+finalData["伤害加成"])*Math.min((finalData["怒气"]+1000),2000)/2000*(1+finalData["必杀技伤害提升"])*finalData["连携"]*finalData["必杀技倍率"]*(1+finalData["暴击几率"]*(finalData["暴击伤害"]+finalData["暴击伤害加成"]-1)+10*finalData["连击几率"]*(finalData["连击伤害"]+finalData["连击伤害加成"]))*375/(375+finalData["敌人防御"]*(1-finalData["防御忽视"]))
+      return damage.toFixed(0)
     },
     xinzhiqiNums: function() {
       return this.xinzhiqis.length
@@ -96,18 +109,7 @@ export default {
       characterData: this.$root.$data.characterData,
       mofaqi: this.$root.$data.mofaqi,
       checkedXinzhiqiIDs: this.$root.$data.checkedXinzhiqiIDs,
-      newXinzhiqiModel: {
-        name: "新建心之器",
-        id: -1,
-        attack: 0,
-        checked: false,
-        disabled: false,
-        properties: {
-          '基础攻击': 0,
-          '暴击几率': 0,
-          '连击几率': 0
-        }
-      }
+      newXinzhiqiModel:this.$root.$data.newXinzhiqiModel
     }
   },
 }
