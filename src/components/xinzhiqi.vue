@@ -3,7 +3,7 @@
     <br>
     <table>
       <tr>
-        <td><el-checkbox v-model="xinzhiqiData.checked" v-if="xinzhiqiData.id!=-1"></el-checkbox></td>
+        <td><el-checkbox v-model="xinzhiqiData.checked" v-if="xinzhiqiData.id!=-1" :disabled="xinzhiqiData.disabled" @change="checkChanged"></el-checkbox></td>
         <td v-if="xinzhiqiData.id!=-1"><el-button @click="save" type="success" plain>保存</el-button><span v-if="saveSuccess==false" style="color:red;font-size:12px">保存失败</span></td>
         <td v-if="xinzhiqiData.id==-1"><el-button @click="save" type="primary">新建</el-button></td>
       </tr>
@@ -21,8 +21,7 @@
         <td><select :ref="'select'+i">
             <option v-for="(v0,k0) in x_properties" :key="k0" :selected="k==k0 ? true : false">{{k0}}</option>
           </select></td>
-        <td><input :value="v" :ref="'input'+i">
-        <div v-if="inputErrors[i]==true"><span style="color:red;font-size:12px">{{errorMsg}}</span></div></td>
+        <td><input :value="v" :ref="'input'+i" type="number" step=0.001><div v-if="inputErrors[i]==true"><span style="color:red;font-size:12px">{{errorMsg}}</span></div></td>
       </tr>
       <tr>
 
@@ -80,13 +79,14 @@ export default {
           this.xinzhiqiData.properties=p
           this.saveSuccess=true
         } else {
-          this.xinzhiqis.push({
-            name: this.$refs.name.value,
-            id: this.currentID+1,
-            attack: this.$refs.attack.value,
-            checked: false,
-            properties: p
-          })
+          this.xinzhiqiData.name=this.$refs.name.value
+          this.xinzhiqiData.id=this.currentID+1
+          this.xinzhiqiData.attack=this.$refs.attack.value,
+          this.xinzhiqiData.properties=p
+          if (this.checkedXinzhiqiIDs.length==3) {
+            this.xinzhiqiData.disabled=true
+          }
+          this.xinzhiqis.push(this.xinzhiqiData)
           this.currentID+=1
         }
       } else {
@@ -105,6 +105,26 @@ export default {
         return false
       } else {
         return true
+      }
+    },
+    checkChanged: function() {
+      var x
+      if (this.xinzhiqiData.disabled==false) {
+        if (this.xinzhiqiData.checked==true) { //选中时
+          this.checkedXinzhiqiIDs.push(this.xinzhiqiData.id)
+          if (this.checkedXinzhiqiIDs.length==3) {
+            for (x in this.xinzhiqis) {
+              if (this.xinzhiqis[x].checked==false) {
+                this.xinzhiqis[x].disabled=true
+              }
+            }
+          }
+        } else { //取消选中时
+          this.checkedXinzhiqiIDs.splice(this.checkedXinzhiqiIDs.indexOf(this.xinzhiqiData.id),1)
+          for (x in this.xinzhiqis) {
+            this.xinzhiqis[x].disabled=false
+          }
+        }
       }
     }
   },
@@ -139,7 +159,9 @@ export default {
       inputErrors: [],
       errorMsg: "值必须为数字",
       xinzhiqis: this.$root.$data.xinzhiqis,
-      currentID: this.$root.$data.currentID
+      currentID: this.$root.$data.currentID,
+      checkedXinzhiqiIDs: this.$root.$data.checkedXinzhiqiIDs,
+      percentageDatas: this.$root.$data.percentageDatas
     }
   },
   props: {

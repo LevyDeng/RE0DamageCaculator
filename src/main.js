@@ -33,6 +33,7 @@ var globalData = {
       id: 0,
       attack: 366,
       checked: false,
+      disabled: false,
       properties: {
         "基础攻击": 0.12,
         "暴击几率": 0.18,
@@ -40,6 +41,7 @@ var globalData = {
       }
     }
   ],
+  checkedXinzhiqiIDs: [],
   mofaqi: {
     "基础攻击": 0,
     "暴击几率": 0,
