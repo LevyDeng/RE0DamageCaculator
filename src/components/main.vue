@@ -8,7 +8,7 @@
         <table>
           <tr v-for="(v,k) in characterData" :key="k">
             <td>{{k+':'}}</td>
-            <td><input v-model="characterData[k]" type="number" step=0.001></td>
+            <td><el-input v-model="characterData[k]" type="number" step=0.001 @mousewheel.native.prevent @DOMMouseScroll.native.prevent></el-input></td>
           </tr>
           <tr>
             <td>最终伤害:</td>
@@ -35,7 +35,7 @@
         <table>
           <tr v-for="(v,k) in mofaqi" :key="k">
             <td>{{k+':'}}</td>
-            <td><input v-model="mofaqi[k]"></td>
+            <td><input v-model="mofaqi[k]" type="number" step="0.001"></td>
           </tr>
         </table>
       </el-main>
@@ -53,7 +53,29 @@ export default {
   },
   computed: {
     damage: function() {
-      return this.characterData['基础攻击']
+      var finalData = JSON.parse(JSON.stringify(this.characterData))
+      for (var key in finalData) {
+        finalData[key] = Number(finalData[key])
+      }
+      finalData["攻击力"]=0
+      for (key in finalData) {
+        //加上心之器数据
+        for (var id in this.checkedXinzhiqiIDs) {
+          for (var x in this.xinzhiqis) {
+            if (x.id==id) {
+              
+              if (key in x.properties){
+                finalData[key] += Number(x.properties[key])
+              }
+            }
+          }
+        }
+        //加上魔法器数据
+        if (key in this.mofaqi) {
+          finalData[key] += Number(this.mofaqi[key])
+        }
+      }
+      return finalData
     },
     xinzhiqiNums: function() {
       return this.xinzhiqis.length
@@ -78,7 +100,7 @@ export default {
       for (var x in this.xinzhiqis) {
         this.xinzhiqis[x].checked = false
         this.xinzhiqis[x].disabled = false
-        this.checkedXinzhiqiIDs = []
+        this.checkedXinzhiqiIDs.splice(0,this.checkedXinzhiqiIDs.length)
       }
     }
   },
@@ -136,7 +158,8 @@ export default {
 
   input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
+  -webkit-appearance: none !important;
+  margin: 0;
   }
 
   input[type="number"]{

@@ -13,7 +13,7 @@
       </tr>
       <tr>
         <td>攻击力:</td>
-        <td><input :value="xinzhiqiData.attack" ref="attack">
+        <td><input :value="xinzhiqiData.attack" ref="attack" type="number" step="0.001">
           <div v-if="attackValid==false"><span style="color:red;font-size:12px">{{errorMsg}}</span></div>
         </td>
       </tr>
@@ -44,53 +44,30 @@ export default {
   },
   methods: {
     save: function() {
-      var ALLVALID = true
       var x = {}
       var p = {}
-      //初始化错误信息
-      this.attackValid=true
-        if (isNaN(this.$refs.attack.value)) {
-          this.attackValid=false
-          ALLVALID=false
-        } else {
-          x.attack = this.$refs.attack.value
-        }
 
-      this.inputErrors=[]
-      for (var i0=0;i0<this.propertiesNum;i0++) {
-        this.inputErrors.push(false)
-      }
+      x.attack = this.$refs.attack.value
 
       for (var i=0; i<this.propertiesNum; i++) {
         var label = this.$refs['select'+i.toString()][0].value
         var value = this.$refs["input"+i][0].value
-        if (this.isValid(label, value)) {
-          p[label]=value
-          this.inputErrors[i]=false
-        } else {
-          this.inputErrors[i]=true
-          ALLVALID=false
-        }
+        p[label]=value
       }
-      if (ALLVALID == true) {
-        if (this.xinzhiqiData.id!=-1) {
-          this.xinzhiqiData.name = this.$refs.name.value
-          this.xinzhiqiData.attack=this.$refs.attack.value
-          this.xinzhiqiData.properties=p
-          this.saveSuccess=true
-        } else {
-          this.xinzhiqiData.name=this.$refs.name.value
-          this.xinzhiqiData.id=this.currentID+1
-          this.xinzhiqiData.attack=this.$refs.attack.value,
-          this.xinzhiqiData.properties=p
-          if (this.checkedXinzhiqiIDs.length==3) {
-            this.xinzhiqiData.disabled=true
-          }
-          this.xinzhiqis.push(this.xinzhiqiData)
-          this.currentID+=1
-        }
+      if (this.xinzhiqiData.id!=-1) {
+        this.xinzhiqiData.name = this.$refs.name.value
+        this.xinzhiqiData.attack=this.$refs.attack.value
+        this.xinzhiqiData.properties=p
       } else {
-          this.saveSuccess = false
+        this.xinzhiqiData.name=this.$refs.name.value
+        this.xinzhiqiData.id=this.currentID+1
+        this.xinzhiqiData.attack=this.$refs.attack.value,
+        this.xinzhiqiData.properties=p
+        if (this.checkedXinzhiqiIDs.length==3) {
+          this.xinzhiqiData.disabled=true
+        }
+        this.xinzhiqis.push(this.xinzhiqiData)
+        this.currentID+=1
       }
     },
     remove: function() {
@@ -98,13 +75,6 @@ export default {
         if (this.xinzhiqis[i].id==this.xinzhiqiData.id) {
           this.xinzhiqis.splice(i,1)
         }
-      }
-    },
-    isValid: function(label,input) {
-      if (isNaN(input)) {
-        return false
-      } else {
-        return true
       }
     },
     checkChanged: function() {
@@ -131,7 +101,7 @@ export default {
   data () {
     return {
       x_properties: {
-        "基础攻击": 0,
+        "攻击力_百分比": 0,
         "暴击几率": 0,
         "连击几率": 0,
         "暴击伤害": 0,
