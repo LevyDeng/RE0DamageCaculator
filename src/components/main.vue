@@ -6,6 +6,7 @@
         <el-row>
           <el-col :span="24">1.<span style="color:blue">角色基础数据</span>其实就是除了心之器,魔法器以外的数据,包括微精灵,战斗中的buff等.懒得再加专门的模块了,统统算在这里吧,只要知道同类数据是加算就可以了.比如暴击伤害加30%的buff,你可以给<span style="color:red">暴击伤害</span>的值手动加上0.3,也可以把<span style="color:red">暴击伤害加成</span>的值设为0.3,结果是一样的.</el-col>
           <el-col :span="24">2.<span style="color:red">基础攻击力</span>的值为角色的黑字攻击力,这个不能随意更改,因为影响攻击力加成的基数</el-col>
+          <el-col>3.修改心之器数据后一定要点<span style="color:green">保存</span></el-col>
         </el-row>
         <br></el-main>
     <el-container>
@@ -92,6 +93,7 @@ export default {
           finalData[key] += Number(this.mofaqi[key])
         }
       }
+      console.log(finalData)
       //伤害公式
       var damage = (finalData["基础攻击力"]*(1+finalData["攻击力_百分比"])+finalData["攻击力"])*(1+finalData["伤害加成"])*Math.min((finalData["怒气"]+1000),2000)/2000*(1+finalData["必杀技伤害提升"])*finalData["连携"]*finalData["必杀技倍率"]*(1+Math.min(finalData["暴击几率"],1)*(finalData["暴击伤害"]+finalData["暴击伤害加成"]-1)+10*Math.min(finalData["连击几率"],1)*(finalData["连击伤害"]+finalData["连击伤害加成"]))*375/(375+finalData["敌人防御"]*Math.max(0,(1-finalData["防御忽视"])))
       return damage.toFixed(0)
@@ -145,10 +147,7 @@ export default {
   }
   
   .el-col {
-    float:left;
-    margin:0;
-    padding:0;
-    float: left;
+    text-align: left;
   }
 
   body > .el-container {
