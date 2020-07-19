@@ -35,7 +35,7 @@
         <table>
           <tr v-for="(v,k) in mofaqi" :key="k">
             <td>{{k+':'}}</td>
-            <td><input v-model="mofaqi[k]" type="number" step="0.001"></td>
+            <td><el-input v-model="mofaqi[k]" type="number" step="0.001" @mousewheel.native.prevent @DOMMouseScroll.native.prevent></el-input></td>
           </tr>
         </table>
       </el-main>
@@ -79,20 +79,6 @@ export default {
     },
     xinzhiqiNums: function() {
       return this.xinzhiqis.length
-    },
-    newXinzhiqiModel: function() {
-      var x = JSON.parse(JSON.stringify(this.xinzhiqis[0]))
-      x.name= "新建心之器"
-      x.id=-1
-      x.attack=0
-      x.checked=false
-      x.disabled=false
-      x.properties={
-        '基础攻击': 0,
-        '暴击几率': 0,
-        '连击几率': 0
-      }
-      return x
     }
   },
   methods: {
@@ -109,7 +95,19 @@ export default {
       xinzhiqis: this.$root.$data.xinzhiqis,
       characterData: this.$root.$data.characterData,
       mofaqi: this.$root.$data.mofaqi,
-      checkedXinzhiqiIDs: this.$root.$data.checkedXinzhiqiIDs
+      checkedXinzhiqiIDs: this.$root.$data.checkedXinzhiqiIDs,
+      newXinzhiqiModel: {
+        name: "新建心之器",
+        id: -1,
+        attack: 0,
+        checked: false,
+        disabled: false,
+        properties: {
+          '基础攻击': 0,
+          '暴击几率': 0,
+          '连击几率': 0
+        }
+      }
     }
   },
 }

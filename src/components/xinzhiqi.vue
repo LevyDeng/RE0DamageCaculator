@@ -9,11 +9,11 @@
       </tr>
       <tr>
         <td>名称</td>
-        <td><input :value="xinzhiqiData.name" ref="name" style="font-weight:bold;font-size:14px"></td>
+        <td><el-input :value="xinzhiqiData.name" ref="name" style="font-weight:bold;font-size:14px"></el-input></td>
       </tr>
       <tr>
         <td>攻击力:</td>
-        <td><input :value="xinzhiqiData.attack" ref="attack" type="number" step="0.001">
+        <td><el-input :value="xinzhiqiData.attack" ref="attack" type="number" step="0.001" @mousewheel.native.prevent @DOMMouseScroll.native.prevent></el-input>
           <div v-if="attackValid==false"><span style="color:red;font-size:12px">{{errorMsg}}</span></div>
         </td>
       </tr>
@@ -21,7 +21,7 @@
         <td><select :ref="'select'+i">
             <option v-for="(v0,k0) in x_properties" :key="k0" :selected="k==k0 ? true : false">{{k0}}</option>
           </select></td>
-        <td><input :value="v" :ref="'input'+i" type="number" step=0.001><div v-if="inputErrors[i]==true"><span style="color:red;font-size:12px">{{errorMsg}}</span></div></td>
+        <td><el-input :value="v" :ref="'input'+i" type="number" step=0.001 @mousewheel.native.prevent @DOMMouseScroll.native.prevent></el-input ><div v-if="inputErrors[i]==true"><span style="color:red;font-size:12px">{{errorMsg}}</span></div></td>
       </tr>
       <tr>
 
