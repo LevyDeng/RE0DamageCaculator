@@ -9,7 +9,7 @@
       </tr>
       <tr>
         <td>名称</td>
-        <td><el-input :value="xinzhiqiData.name" ref="name" style="font-weight:bold;font-size:14px"></el-input></td>
+        <td><el-input v-model="xinzhiqiData.name" ref="name" style="font-weight:bold;font-size:14px"></el-input></td>
       </tr>
       <tr>
         <td>攻击力:</td>
