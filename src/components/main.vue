@@ -15,7 +15,7 @@
         <table>
           <tr v-for="(v,k) in characterData" :key="k">
             <td><span v-if="k != '攻击力'">{{k+':'}}</span><span v-if="k == '攻击力'">额外攻击力加成</span></td>
-            <td><el-input v-model="characterData[k]" type="number" step=0.001 @mousewheel.native.prevent @DOMMouseScroll.native.prevent></el-input></td>
+            <td><el-input v-model="characterData[k]" type="number" step=0.0001 @mousewheel.native.prevent @DOMMouseScroll.native.prevent></el-input></td>
           </tr>
           <tr>
             <td>最终伤害:</td>
@@ -42,7 +42,7 @@
         <table>
           <tr v-for="(v,k) in mofaqi" :key="k">
             <td>{{k+':'}}</td>
-            <td><el-input v-model="mofaqi[k]" type="number" step="0.001" @mousewheel.native.prevent @DOMMouseScroll.native.prevent></el-input></td>
+            <td><el-input v-model="mofaqi[k]" type="number" step="0.0001" @mousewheel.native.prevent @DOMMouseScroll.native.prevent></el-input></td>
           </tr>
         </table>
       </el-main>
@@ -65,7 +65,6 @@ export default {
       for (var key in finalData) {
         finalData[key] = Number(finalData[key])
       }
-      finalData["攻击力"]=0
       if (this.checkedXinzhiqiIDs.length!=0) {
         for (var i in this.checkedXinzhiqiIDs) {
           for (var x in this.xinzhiqis) {
@@ -93,7 +92,6 @@ export default {
           finalData[key] += Number(this.mofaqi[key])
         }
       }
-      console.log(finalData)
       //伤害公式
       var damage = (finalData["基础攻击力"]*(1+finalData["攻击力_百分比"])+finalData["攻击力"])*(1+finalData["伤害加成"])*Math.min((finalData["怒气"]+1000),2000)/2000*(1+finalData["必杀技伤害提升"])*finalData["连携"]*finalData["必杀技倍率"]*(1+Math.min(finalData["暴击几率"],1)*(finalData["暴击伤害"]+finalData["暴击伤害加成"]-1)+10*Math.min(finalData["连击几率"],1)*(finalData["连击伤害"]+finalData["连击伤害加成"]))*375/(375+finalData["敌人防御"]*Math.max(0,(1-finalData["防御忽视"])))
       return damage.toFixed(0)

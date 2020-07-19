@@ -13,7 +13,7 @@
       </tr>
       <tr>
         <td>攻击力:</td>
-        <td><el-input v-model="xinzhiqiData.attack" ref="attack" type="number" step="0.001" @mousewheel.native.prevent @DOMMouseScroll.native.prevent></el-input>
+        <td><el-input v-model="xinzhiqiData.attack" ref="attack" type="number" step="0.0001" @mousewheel.native.prevent @DOMMouseScroll.native.prevent></el-input>
           <div v-if="attackValid==false"><span style="color:red;font-size:12px">{{errorMsg}}</span></div>
         </td>
       </tr>
@@ -21,7 +21,7 @@
         <td><select :ref="'select'+i">
             <option v-for="(v0,k0) in x_properties" :key="k0" :selected="k==k0 ? true : false">{{k0}}</option>
           </select></td>
-        <td><el-input  :ref="'input'+i" type="number" v-model="xinzhiqiData.properties[k]" step=0.001 @mousewheel.native.prevent @DOMMouseScroll.native.prevent></el-input ><div v-if="inputErrors[i]==true"><span style="color:red;font-size:12px">{{errorMsg}}</span></div></td>
+        <td><el-input  :ref="'input'+i" type="number" v-model="xinzhiqiData.properties[k]" step=0.0001 @mousewheel.native.prevent @DOMMouseScroll.native.prevent></el-input ><div v-if="inputErrors[i]==true"><span style="color:red;font-size:12px">{{errorMsg}}</span></div></td>
       </tr>
       <tr>
 
