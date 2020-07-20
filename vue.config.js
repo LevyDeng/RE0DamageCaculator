@@ -1,4 +1,7 @@
 module.exports = {
-  publicPath: './',
-  outputDir: "../../web/LevyDeng.github.io/RE0DamageCaculator"
+  "publicPath": "./",
+  "outputDir": "../../web/LevyDeng.github.io/RE0DamageCaculator",
+  "transpileDependencies": [
+    "vuetify"
+  ]
 }
