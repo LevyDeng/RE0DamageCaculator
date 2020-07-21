@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="shown"
+    <v-navigation-drawer class="brown darken-1" dark v-model="shown"
       app>
       <v-list dense>
         <v-list-item  to="/character">

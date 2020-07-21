@@ -1,14 +1,22 @@
 <template>
   <v-main>
-    <div>
-      心之器
-      <Xinzhiqi></Xinzhiqi>
-    </div>
+    <v-row>
+      <v-col cols="6" xs="8" sm="6" mid="6" lg="4" offset-xs="0" offset-sm="2" offset-mid="1" offset-lg="0">
+        <v-expansion-panels>
+          <v-expansion-panel>
+            <v-expansion-panel-header></v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <xinzhiqi></xinzhiqi>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </v-col>
+    </v-row>
   </v-main>
 </template>
 
 <script>
-import xinzhiqi from "./Xinzhiqi.vue"
+import xinzhiqi from "./xinzhiqi.vue"
 
 export default {
   name: "xinzhiqis",

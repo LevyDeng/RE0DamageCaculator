@@ -1,5 +1,7 @@
 <template>
-  <div>x</div>
+  <v-main>
+    
+  </v-main>
 </template>
 
 <script>
