@@ -6,24 +6,24 @@
         <v-list-item  to="/character">
           <v-list-item-action>
           </v-list-item-action>
-            <v-icon color="deep-orange">mdi-star</v-icon>
+            <v-icon color="#0277BD">mdi-calculator</v-icon>
           <v-list-item-content>
             <v-list-item-title>必杀技伤害计算</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-
-    <v-app-bar app color="black" dark @click.stop="shown = !shown">
+    
+    <v-app-bar color="#8D6E63" dark elevate-on-scroll app @click.stop="shown = !shown">
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
       <v-toolbar-title>RE0伤害计算器</v-toolbar-title>
     </v-app-bar>
-    <v-main>
-      <v-container>
-        <v-tabs v-model="tab" align-with-title>
+    <v-main class="brown lighten-5">
+      <v-container >
+        <v-tabs background-color="brown lighten-4" align-with-title>
           <v-tab to="/character">角色面板</v-tab>
           <v-tab to="/mofaqi">魔法器</v-tab>
-          <v-tab to="/xinzhiqi">心之器</v-tab>
+          <v-tab to="/xinzhiqis">心之器</v-tab>
         </v-tabs>
         <router-view></router-view>
       </v-container>
