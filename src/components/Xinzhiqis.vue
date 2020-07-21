@@ -1,6 +1,9 @@
 <template>
   <v-main>
-    <div><xinzhiqi></xinzhiqi></div>
+    <div>
+      心之器
+      <xinzhiqi></xinzhiqi>
+    </div>
   </v-main>
 </template>
 
