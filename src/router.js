@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import VueRouter from "vue-router";
 
-import character from "./components/Character.vue"
-import xinzhiqis from "./components/Xinzhiqis.vue"
-import mofaqi from "./components/Mofaqi.vue"
+import character from "./components/character.vue"
+import xinzhiqis from "./components/xinzhiqis.vue"
+import mofaqi from "./components/mofaqi.vue"
 
 Vue.use(VueRouter);
 

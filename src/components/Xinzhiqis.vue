@@ -2,13 +2,13 @@
   <v-main>
     <div>
       心之器
-      <xinzhiqi></xinzhiqi>
+      <Xinzhiqi></Xinzhiqi>
     </div>
   </v-main>
 </template>
 
 <script>
-import xinzhiqi from "./xinzhiqi.vue"
+import xinzhiqi from "./Xinzhiqi.vue"
 
 export default {
   name: "xinzhiqis",
