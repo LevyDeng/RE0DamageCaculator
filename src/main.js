@@ -3,9 +3,10 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify';
 import './registerServiceWorker'
 import router from "./router.js"
+import vuex from "vuex"
 
 Vue.config.productionTip = false
-
+Vue.use(vuex)
 
 var globalData = {
   currentID: 0,
