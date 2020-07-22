@@ -2,8 +2,8 @@ import Vue from 'vue'
 import VueRouter from "vue-router";
 
 import character from "./components/character.vue"
-import xinzhiqis from "./components/xinzhiqis.vue"
-import mofaqi from "./components/mofaqi.vue"
+import hearchines from "./components/hearchines.vue"
+import magichines from "./components/magichines.vue"
 
 Vue.use(VueRouter);
 
@@ -13,12 +13,12 @@ const routes = [
     component: character
   },
   {
-    path: "/xinzhiqis",
-    component: xinzhiqis
+    path: "/hearchines",
+    component: hearchines
   },
   {
-    path: "/mofaqi",
-    component: mofaqi
+    path: "/magichines",
+    component: magichines
   },
   {
     path: "/",

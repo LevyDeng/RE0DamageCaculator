@@ -1,11 +1,9 @@
 <template>
-  <v-main>
-    
-  </v-main>
+  <v-main>魔法器</v-main>
 </template>
 
 <script>
 export default {
-  name: "xinzhiqi"
+  name: 'magichines'
 }
 </script>

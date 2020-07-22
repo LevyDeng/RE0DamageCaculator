@@ -1,9 +1,11 @@
 <template>
-  <v-main>魔法器</v-main>
+  <v-main>
+    
+  </v-main>
 </template>
 
 <script>
 export default {
-  name: 'mofaqi'
+  name: "hearchine"
 }
 </script>

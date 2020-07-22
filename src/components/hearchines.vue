@@ -6,7 +6,7 @@
           <v-expansion-panel>
             <v-expansion-panel-header></v-expansion-panel-header>
             <v-expansion-panel-content>
-              <xinzhiqi></xinzhiqi>
+              <hearchine></hearchine>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -16,12 +16,12 @@
 </template>
 
 <script>
-import xinzhiqi from "./xinzhiqi.vue"
+import hearchine from "./hearchine.vue"
 
 export default {
-  name: "xinzhiqis",
+  name: "hearchines",
   components: {
-    xinzhiqi
+    hearchine
   }
 }
 </script>

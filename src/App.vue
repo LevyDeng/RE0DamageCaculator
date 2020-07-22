@@ -22,8 +22,8 @@
       <v-container >
         <v-tabs background-color="brown lighten-4" align-with-title>
           <v-tab to="/character">角色面板</v-tab>
-          <v-tab to="/mofaqi">魔法器</v-tab>
-          <v-tab to="/xinzhiqis">心之器</v-tab>
+          <v-tab to="/magichines">魔法器</v-tab>
+          <v-tab to="/hearchines">心之器</v-tab>
         </v-tabs>
         <router-view></router-view>
       </v-container>
@@ -40,6 +40,20 @@ export default {
 
   data: () => ({
     shown: null,
+    numberRules: [
+      value => (value || '').length <= 255 || 'Max 255 characters',
+      value => {
+        const pa = /\d+\.?\d*%?(\+\d+\.?\d*%?)*/
+        return pa.test(value) || '输入格式错误'
+      }
+    ]
   }),
+  created: function() {
+    localStorage.getItem("userMsg") && this.$store.replaceState(Object.assign(this.$store.state,JSON.parse(localStorage.getItem("userMsg"))))
+
+    window.addEventListener("beforeunload",()=>{
+        localStorage.setItem("userMsg",JSON.stringify(this.$store.state))
+    })
+  }
 };
 </script>
