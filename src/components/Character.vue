@@ -120,7 +120,6 @@ export default {
       this.currentCharacterID=this.$refs.characterSelection.value
     },
     saveInput: function(key, e) {
-    
       var inputValue = e.toString()
       if (this.$store.state.valueTypeMap[key]=="number")
       {
