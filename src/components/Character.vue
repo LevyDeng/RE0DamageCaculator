@@ -8,13 +8,11 @@
             <v-row>
               <v-col cols="6">
                 <v-select :items="characterList"
-                :label="'当前角色'+':'+'('+characterDatas.characters[characterSelection.abbr].name.value+')'"
+                :label="characterDatas.characters[characterSelection.key].name.value"
                 filled
                 v-model="characterSelection"
-                :hint="`${characterSelection.state}, ${characterSelection.abbr}`"
                 item-text="state"
-                item-value="abbr"
-                persistent-hint
+                item-value="key"
                 return-object
                 single-line
                 >
@@ -28,6 +26,7 @@
               <v-col cols="8">
                 <v-text-field
                   label="名字" :value="characterDatas.characters[currentCharacterID].name.value"
+                  @input="saveInput('name', $event)"
                   >
                 </v-text-field>
               </v-col>
@@ -36,9 +35,12 @@
               cols="6">
               <!-- 输入框 -->
               <v-text-field 
+                @change="saveInput(key, $event)"
                 :label='characterDatas.characters[currentCharacterID][key].label'
                 :value="characterDatas.characters[currentCharacterID][key].value"
-                :rules="numberRules">
+                :rules="numberRules"
+                :hint="hints[key]"
+                persistent-hint>
                 <template v-slot:append>
                 <v-tooltip right v-if="characterDatas.tips[key]">
                 <template v-slot:activator="{ on }">
@@ -81,19 +83,24 @@ export default {
       numberRules: this.rules.numberRules,
       calcInput: this.tools.calcInput,
       characterSelection: {
-        state: "惠惠",
-        abbr: 0
-      }
+        state: this.$store.state.characterDatas.characters[0].name.value,
+        key: 0,
+        seq: 0
+      },
+      hints: {
+      },
     }
   },
   computed: 
   {
     characterList: function() {
       var x = []
-      for (var k in Object.keys(this.$store.state.characterDatas.characters)) {
+      var keys = Object.keys(this.$store.state.characterDatas.characters)
+      for (var i in keys) {
         x.push({
-          state: this.$store.state.characterDatas.characters[k].name.value,
-          abbr: k}
+          state: i.toString()+' : ' +this.$store.state.characterDatas.characters[keys[i]].name.value,
+          seq: i,
+          key: keys[i]}
         )
       }
       return x
@@ -111,6 +118,27 @@ export default {
     changeCurrentID: function() {
       console.log(this.$refs.characterSelection.label)
       this.currentCharacterID=this.$refs.characterSelection.value
+    },
+    saveInput: function(key, e) {
+    
+      var inputValue = e.toString()
+      if (this.$store.state.valueTypeMap[key]=="number")
+      {
+      //显示计算后的数据
+        var res = this.calcInput(inputValue)
+        if (key in this.$store.state.percentageDatas) {
+          res = Number((Number(res)*100).toString()).toFixed(2)+'%'
+        }
+        this.hints[key]=res.toString()
+      }
+      //保存数据到store
+      this.characterDatas.characters[this.currentCharacterID][key].value=inputValue
+      this.$store.commit("save",{
+        module: "character",
+        id:this.currentCharacterID,
+        key: key,
+        value: inputValue
+      })
     }
   }
 }

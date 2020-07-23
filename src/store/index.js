@@ -23,6 +23,18 @@ export default new Vuex.Store({
       skill_ub: "number",
       skill_ub_pro: "number"
     },
+    percentageDatas: {
+      'attack_percentage':0,
+      'crit_p':0,
+      'crit_d':0,
+      'combo_p':0,
+      'combo_d':0,
+      'damage':0,
+      'conti':0,
+      'armor_ignore':0,
+      'skill_ub':0,
+      'skill_ub_pro':0
+    },
     characterDatas: {
       currentMaxID: 0,
       tips: {
@@ -128,6 +140,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    save: function(state, d) {
+      state[d.module+"Datas"][d.module+"s"][d.id][d.key].value=d.value
+    }
   },
   actions: {
   },
