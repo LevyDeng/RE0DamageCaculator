@@ -8,9 +8,16 @@
             <v-row>
               <v-col cols="6">
                 <v-select :items="characterList"
-                :label="'当前角色'+':'+'('+characterDatas.characters[currentCharacterID].name.value+')'"
+                :label="'当前角色'+':'+'('+characterDatas.characters[characterSelection.abbr].name.value+')'"
                 filled
-                v-model="currentCharacterID">
+                v-model="characterSelection"
+                :hint="`${characterSelection.state}, ${characterSelection.abbr}`"
+                item-text="state"
+                item-value="abbr"
+                persistent-hint
+                return-object
+                single-line
+                >
                 </v-select>
               </v-col>
             </v-row>
@@ -21,36 +28,29 @@
               <v-col cols="8">
                 <v-text-field
                   label="名字" :value="characterDatas.characters[currentCharacterID].name.value"
-                  ></v-text-field>
+                  >
+                </v-text-field>
               </v-col>
               <v-col v-for="key in numberInputs" 
               :key=key.id 
               cols="6">
               <!-- 输入框 -->
-                <v-row no-gutters>
-                  <v-col cols="22"><v-text-field 
-                  :label='characterDatas.characters[currentCharacterID][key].label'
-                  :value="characterDatas.characters[currentCharacterID][key].value"
-                  :rules="numberRules"></v-text-field></v-col>
-                  <v-col cols="2">
-                    <v-row>
-                      <v-col>
-                        <v-tooltip right v-if="characterDatas.tips[key]">
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-icon
-                    
-                      color="#90A4AE"
-                      v-bind="attrs"
-                      v-on="on"
-                    >mdi-alert-circle
-                    </v-icon>
-                  </template>
-                  <span>{{characterDatas.tips[key]}}</span>
+              <v-text-field 
+                :label='characterDatas.characters[currentCharacterID][key].label'
+                :value="characterDatas.characters[currentCharacterID][key].value"
+                :rules="numberRules">
+                <template v-slot:append>
+                <v-tooltip right v-if="characterDatas.tips[key]">
+                <template v-slot:activator="{ on }">
+                  <v-icon
+                    color="#90A4AE"
+                    v-on="on"
+                  >mdi-alert-circle
+                  </v-icon>
+                </template>
+                <span>{{characterDatas.tips[key]}}</span>
                 </v-tooltip>
-                      </v-col>
-                    </v-row>
-                    </v-col>
-                </v-row>
+                </template></v-text-field>
                 
                 
               </v-col>
@@ -77,7 +77,13 @@ export default {
   name: "character",
   data() {
     return {
-      currentCharacterID: 0
+      currentCharacterID: 0,
+      numberRules: this.rules.numberRules,
+      calcInput: this.tools.calcInput,
+      characterSelection: {
+        state: "惠惠",
+        abbr: 0
+      }
     }
   },
   computed: 
@@ -85,7 +91,10 @@ export default {
     characterList: function() {
       var x = []
       for (var k in Object.keys(this.$store.state.characterDatas.characters)) {
-        x.push(k+':'+this.$store.state.characterDatas.characters[k].name.value)
+        x.push({
+          state: this.$store.state.characterDatas.characters[k].name.value,
+          abbr: k}
+        )
       }
       return x
     },
@@ -99,6 +108,10 @@ export default {
     ])
   },
   methods: {
+    changeCurrentID: function() {
+      console.log(this.$refs.characterSelection.label)
+      this.currentCharacterID=this.$refs.characterSelection.value
+    }
   }
 }
 </script>
