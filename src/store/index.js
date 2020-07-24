@@ -102,16 +102,61 @@ export default new Vuex.Store({
           value: "2125%"
         },
         skill_ub_pro: {
-          label: "必杀技伤害加成",
+          label: "必杀技伤害",
           value: '18%'
         }
       }
       }
     },
     hearchineDatas: {
+      checkedHearchineIDs: [],
+      hearchineProperties: [
+        {
+          label: '基础攻击',
+          key: 'attack_percentage'
+        },
+        {
+          label: '暴击几率',
+          key: 'crit_p'
+        },
+        {
+          label: '暴击伤害',
+          key: 'crit_d'
+        },
+        {
+          label: '连击几率',
+          key: 'combo_p'
+        },
+        {
+          label: '连击伤害',
+          key: 'combo_d'
+        },
+        {
+          label: '伤害加成',
+          key: 'damage'
+        },
+        {
+          label: '防御忽视',
+          key: 'armor_ignore'
+        },
+        {
+          label: '必杀技伤害',
+          key: 'skill_ub_pro'
+        },
+        {
+          label: '"========":',
+          key: 'epmty'
+        }
+      ],
       currentMaxID: 0,
       hearchines: {
       "0":{
+        disabled: {
+          value: false
+        },
+        checked: {
+          value: false
+        },
         name: {
           label: "名称",
           value: "从天而降的美好祝福",
@@ -123,13 +168,18 @@ export default new Vuex.Store({
           valueType: "number"
         },
         attack_percentage: {
-          label: "攻击力加成",
+          label: "基础攻击",
           value: '12%',
           valueType: "number"
         },
         crit_p: {
           label: "暴击几率",
           value: '18%',
+          valueType: "number"
+        },
+        armor_ignore: {
+          label: "防御忽视",
+          value: '15%',
           valueType: "number"
         }
       }
