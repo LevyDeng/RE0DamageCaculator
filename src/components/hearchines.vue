@@ -1,10 +1,11 @@
 <template>
   <v-main>
     <v-row dense>
-      <v-col v-for="id in hearchines"
-      :key="id.id"
-       cols="6" xs="8" sm="6" mid="6" lg="4">
-        <hearchine :hearchineID="id"></hearchine>
+      <input type="hidden" v-model="hearchinesFlag">
+      <v-col v-for="(h,k) in $store.state.hearchineDatas.hearchines"
+      :key="k"
+       cols="6" xs="12" sm="8">
+        <hearchine :hearchineID="k"></hearchine>
       </v-col>
     </v-row>
   </v-main>
@@ -17,6 +18,11 @@ export default {
   name: "hearchines",
   components: {
     hearchine
+  },
+  data() {
+    return {
+      hearchinesFlag: this.$store.state.flags.hearchinesFlag
+    }
   },
   computed: {
     hearchines() {

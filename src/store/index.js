@@ -5,6 +5,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    flags: {
+      hearchinesFlag: 0
+    },
     valueTypeMap: {
       name: "string",
       attack: "number",
@@ -144,7 +147,7 @@ export default new Vuex.Store({
           key: 'skill_ub_pro'
         },
         {
-          label: '"========":',
+          label: '-----空-----',
           key: 'epmty'
         }
       ],
@@ -192,6 +195,11 @@ export default new Vuex.Store({
   mutations: {
     save: function(state, d) {
       state[d.module+"Datas"][d.module+"s"][d.id][d.key].value=d.value
+    },
+    removeHearchine: function(state, hID) {
+      delete state.hearchineDatas.hearchines[hID]
+      Object.assign({},state.hearchineDatas)
+      state.flags.hearchinesFlag += 1
     }
   },
   actions: {
