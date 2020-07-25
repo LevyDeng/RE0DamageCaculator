@@ -3,7 +3,7 @@
     <v-row dense>
       <v-col v-for="(h,i) in $store.state.hearchineDatas.hearchines"
       :key="i"
-       cols="6" xs="12" sm="8">
+       cols="4" xs="6" sm="6">
         <hearchine :hearchineID="i"></hearchine>
       </v-col>
     </v-row>

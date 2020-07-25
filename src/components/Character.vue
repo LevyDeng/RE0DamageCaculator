@@ -1,25 +1,8 @@
 <template>
   <v-main>
     <v-row dense>
-      <!-- 选择当前角色 -->
       <v-col xs="12" sm="6" mid="6" lg="4">
         <v-row>
-          <v-col cols="12" dense>
-            <v-row>
-              <v-col cols="6">
-                <v-select :items="characterList"
-                :label="characterDatas.characters[characterSelection.key].name.value"
-                filled
-                v-model="characterSelection"
-                item-text="state"
-                item-value="key"
-                return-object
-                single-line
-                >
-                </v-select>
-              </v-col>
-            </v-row>
-          </v-col>
           <!-- 角色基础数据输入框 -->
           <v-col class="grey lighten-2" cols="11" dense offset="1">
             <v-row>
@@ -79,31 +62,16 @@ export default {
   name: "character",
   data() {
     return {
-      currentCharacterID: 0,
       numberRules: this.rules.numberRules,
       calcInput: this.tools.calcInput,
-      characterSelection: {
-        state: this.$store.state.characterDatas.characters[0].name.value,
-        key: 0,
-        seq: 0
-      },
       hints: {
       },
     }
   },
   computed: 
   {
-    characterList: function() {
-      var x = []
-      var keys = Object.keys(this.$store.state.characterDatas.characters)
-      for (var i in keys) {
-        x.push({
-          state: i.toString()+' : ' +this.$store.state.characterDatas.characters[keys[i]].name.value,
-          seq: i,
-          key: keys[i]}
-        )
-      }
-      return x
+    currentCharacterID: function() {
+      return this.$store.state.currentCharacterID
     },
     numberInputs: function() {
       var l = Object.keys(this.$store.state.characterDatas.characters[this.currentCharacterID])

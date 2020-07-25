@@ -1,17 +1,17 @@
 <template>
-  <v-card color="indigo lighten-5">
+  <v-card color="orange lighten-5">
     <v-form v-model="valid">
       <v-row dense>
-        <v-col cols="1">
+        <v-col cols="2">
           <v-checkbox :checked="hearchineDatas.hearchines[hearchineID].checked.value"
           :disabled="hearchineDatas.hearchines[hearchineID].disabled.value"
           @change="checkChanged"></v-checkbox>
         </v-col>
-        <v-col cols="5">
+        <v-col cols="6">
           <v-text-field label="名字" v-model="name.value"
           ></v-text-field>
         </v-col>
-        <v-col cols="5" >
+        <v-col cols="3" >
           <v-text-field label="攻击力" v-model="attack.value" :rules="pureNumberRules"></v-text-field>
         </v-col>
       </v-row>
@@ -21,7 +21,7 @@
           <input type="hidden" name="flag" v-model="flag"><!-- 用于强制刷新组件 -->
           <v-row dense v-for="(p,k) in propertySelection" 
             :key=p.key>
-            <v-col cols="1">
+            <v-col cols="2">
               <v-tooltip right>
                 <template v-slot:activator="{ on, attrs }">
                 <v-btn
@@ -39,7 +39,7 @@
               </v-tooltip>
             </v-col>
             <v-col
-            cols="5">
+            cols="6">
               <v-select
                 :items="hearchineDatas.hearchineProperties"
                 :label="p.label"
@@ -50,7 +50,7 @@
                 single-line>
               </v-select>
             </v-col>
-            <v-col cols="5">
+            <v-col cols="3">
               <v-text-field
               v-model="propertySelection[k].value"
               :rules="pureNumberRules"></v-text-field>
@@ -76,7 +76,7 @@
             </v-col></v-row>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row dense>
         <v-col>
           <v-btn class="ma-2" outlined fab small color="red"
           @click="removeSelf">
