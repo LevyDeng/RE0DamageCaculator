@@ -74,7 +74,8 @@ export default {
     },
     numberInputs: function() {
       var l = Object.keys(this.$store.state.characterDatas.characters[this.currentCharacterID])
-      l.splice(0,1)
+      l.splice(l.indexOf('name'),1)
+      l.splice(l.indexOf('id'),1)
       return l
     },
     ...mapState([

@@ -47,7 +47,7 @@
               <v-select 
               ref="characterSelect"
               :items="characterList"
-              :label="$store.state.characterDatas.characters[characterSelection.key].name.value"
+              :label="$store.state.characterDatas.characters[characterSelection.seq].name.value"
               filled
               v-model="characterSelection"
               item-text="state"
@@ -101,7 +101,14 @@ export default {
       this.$store.commit('changeCurrentCharacter', this.characterSelection.key)
     },
     removeCharacter: function() {
-      this.$store.commit('removeCharacter', this.characterSelection.key)
+      if (this.characterList.length>=1) {
+        for (var i in this.characterList) {
+          if (this.characterList[i].key==this.$store.state.currentCharacterID) {
+            this.characterList.splice(i,1)
+          }
+        }
+      }
+      this.$store.commit('removeCharacter', this.characterSelection.seq)
     }
   },
   data() {
@@ -116,12 +123,11 @@ export default {
   computed: {
     characterList: function() {
       var x = []
-      var keys = Object.keys(this.$store.state.characterDatas.characters)
-      for (var i in keys) {
+      for (var i in this.$store.state.characterDatas.characters) {
         x.push({
-          state: i.toString()+' : ' +this.$store.state.characterDatas.characters[keys[i]].name.value,
+          state: i.toString()+' : ' +this.$store.state.characterDatas.characters[i].name.value,
           seq: i,
-          key: keys[i]}
+          key: this.$store.state.characterDatas.characters[i].id.value}
         )
       }
       return x
