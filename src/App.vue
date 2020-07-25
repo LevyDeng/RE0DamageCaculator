@@ -101,14 +101,14 @@ export default {
       this.$store.commit('changeCurrentCharacter', this.characterSelection.key)
     },
     removeCharacter: function() {
-      if (this.characterList.length>=1) {
+      if (this.characterList.length>=2) {
         for (var i in this.characterList) {
           if (this.characterList[i].key==this.$store.state.currentCharacterID) {
             this.characterList.splice(i,1)
           }
         }
+        this.$store.commit('removeCharacter', this.characterSelection.seq)
       }
-      this.$store.commit('removeCharacter', this.characterSelection.seq)
     }
   },
   data() {
