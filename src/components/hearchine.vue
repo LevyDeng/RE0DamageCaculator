@@ -110,12 +110,12 @@ export default {
     }
   },
   props: {
-    hearchineID: String
+    hearchineID: Number
   },
   computed: {
     propertySelection() {
       var pList = Object.keys(this.$store.state.hearchineDatas.hearchines[this.hearchineID])
-      var exceptList = ['name','attack','checked','disabled']
+      var exceptList = ['id', 'name','attack','checked','disabled']
       for (var i in exceptList) {
         pList.splice(pList.indexOf(exceptList[i]),1)
       }

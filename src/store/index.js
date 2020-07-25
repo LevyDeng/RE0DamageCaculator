@@ -152,8 +152,11 @@ export default new Vuex.Store({
         }
       ],
       currentMaxID: 0,
-      hearchines: {
-      "0":{
+      hearchines: [
+      {
+        id: {
+          value: 0
+        },
         disabled: {
           value: false
         },
@@ -186,7 +189,7 @@ export default new Vuex.Store({
           valueType: "number"
         }
       }
-      }
+      ]
     },
     magichineDatas: {
 
@@ -197,9 +200,7 @@ export default new Vuex.Store({
       state[d.module+"Datas"][d.module+"s"][d.id][d.key].value=d.value
     },
     removeHearchine: function(state, hID) {
-      delete state.hearchineDatas.hearchines[hID]
-      Object.assign({},state.hearchineDatas)
-      state.flags.hearchinesFlag += 1
+      state.hearchineDatas.hearchines.splice(hID,1)
     }
   },
   actions: {
