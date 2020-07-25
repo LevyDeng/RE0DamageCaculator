@@ -102,11 +102,6 @@ export default {
     },
     removeCharacter: function() {
       if (this.characterList.length>=2) {
-        for (var i in this.characterList) {
-          if (this.characterList[i].key==this.$store.state.currentCharacterID) {
-            this.characterList.splice(i,1)
-          }
-        }
         this.$store.commit('removeCharacter', this.characterSelection.seq)
       }
     }
@@ -126,7 +121,7 @@ export default {
       for (var i in this.$store.state.characterDatas.characters) {
         x.push({
           state: i.toString()+' : ' +this.$store.state.characterDatas.characters[i].name.value,
-          seq: i,
+          seq: Number(i),
           key: this.$store.state.characterDatas.characters[i].id.value}
         )
       }
