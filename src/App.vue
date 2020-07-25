@@ -20,13 +20,33 @@
     </v-app-bar>
     <v-main class="brown lighten-5">
       <v-row dense>
-        <v-col cols="6" dense>
+        <v-col cols="8" dense>
           <v-row align="start">
             <v-col cols="3" lg="2">
               <v-text-field value="当前角色:" readonly></v-text-field>
             </v-col>
+            <v-col cols="1">
+              <v-tooltip right>
+                <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                class="mx-3 my-8"
+                fab x-small 
+                width="1"
+                height="1"
+                v-bind="attrs"
+                v-on="on"
+                @click="removeCharacter()">
+                  <v-icon color="red">mdi-cancel</v-icon>
+                </v-btn>
+                </template>
+                <span>删除角色</span>
+              </v-tooltip>
+            </v-col>
             <v-col cols="6" lg="4">
-              <v-select :items="characterList"
+              
+              <v-select 
+              ref="characterSelect"
+              :items="characterList"
               :label="$store.state.characterDatas.characters[characterSelection.key].name.value"
               filled
               v-model="characterSelection"
@@ -37,6 +57,23 @@
               @change="changeCurrentCharacter"
               >
               </v-select>
+            </v-col>
+            <v-col cols="1">
+              <v-tooltip right>
+                <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                class="mx-3 my-8"
+                fab x-small 
+                width="1"
+                height="1"
+                v-bind="attrs"
+                v-on="on"
+                @click="addCharacter()">
+                  <v-icon color="green">mdi-plus</v-icon>
+                </v-btn>
+                </template>
+                <span>添加角色</span>
+              </v-tooltip>
             </v-col>
           </v-row>
         </v-col>
@@ -62,6 +99,9 @@ export default {
   methods: {
     changeCurrentCharacter: function() {
       this.$store.commit('changeCurrentCharacter', this.characterSelection.key)
+    },
+    removeCharacter: function() {
+      this.$store.commit('removeCharacter', this.characterSelection.key)
     }
   },
   data() {

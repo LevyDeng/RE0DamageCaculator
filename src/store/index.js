@@ -267,6 +267,13 @@ export default new Vuex.Store({
     },
     changeCurrentCharacter: function(state, id) {
       state.currentCharacterID=id
+    },
+    removeCharacter: function(state, id) {
+      var characterIDs = Object.keys(state.characterDatas.characters)
+      if (characterIDs.length>=1) {
+        delete state.characterDatas.characters[id]
+        state.currentCharacterID=Object.keys(state.characterDatas.characters)[0]
+      }
     }
   },
   actions: {

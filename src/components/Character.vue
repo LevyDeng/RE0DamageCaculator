@@ -3,6 +3,7 @@
     <v-row dense>
       <v-col xs="12" sm="6" mid="6" lg="4">
         <v-row>
+          <v-subheader>角色基础数据:</v-subheader>
           <!-- 角色基础数据输入框 -->
           <v-col class="grey lighten-2" cols="11" dense offset="1">
             <v-row>
@@ -36,8 +37,6 @@
                 <span>{{characterDatas.tips[key]}}</span>
                 </v-tooltip>
                 </template></v-text-field>
-                
-                
               </v-col>
             </v-row>
           </v-col>
