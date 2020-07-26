@@ -6,7 +6,7 @@
           <v-subheader>角色基础数据:</v-subheader>
           <!-- 角色基础数据输入框 -->
           <v-col class="grey lighten-2" cols="11" dense offset="1">
-            <v-row>
+            <v-row dense>
               <v-col cols="8">
                 <v-text-field
                   label="名字" :value="characterDatas.characters[characterSelection.key].name.value"
