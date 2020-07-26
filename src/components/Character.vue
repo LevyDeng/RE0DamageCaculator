@@ -83,9 +83,6 @@ export default {
     ])
   },
   methods: {
-    changeCurrentID: function() {
-      console.log(this.$refs.characterSelection.label)
-    },
     saveInput: function(key, e) {
       var inputValue = e.toString()
       if (this.$store.state.valueTypeMap[key]=="number")

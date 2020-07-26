@@ -278,15 +278,12 @@ export default new Vuex.Store({
     removeHearchine: function(state, hID) {
       state.hearchineDatas.hearchines.splice(hID,1)
     },
-    changeCurrentCharacter: function(state, id) {
-      Vue.set(state,'currentCharacterID', id)
-    },
     characterSelection: function(state, cs) {
       Vue.set(state.characterDatas,'characterSelection', cs)
     },
     removeCharacter: function(state, id) {
       Vue.delete(state.characterDatas.characters, id)
-      var newID=Object.keys(state.characterDatas.characters)[0]
+      var newID=Object.keys(state.characterDatas.characters).reverse()[0]
       Vue.set(state, 'currentCharacterID',newID)
       //修改当前选择用户
       var cs = {

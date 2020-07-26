@@ -26,7 +26,7 @@
               <v-text-field value="当前角色:" readonly></v-text-field>
             </v-col>
             <v-col cols="1">
-              <v-tooltip right>
+              <v-tooltip left>
                 <template v-slot:activator="{ on, attrs }">
                 <v-btn
                 class="mx-3 my-8"
@@ -39,7 +39,7 @@
                   <v-icon color="red">mdi-cancel</v-icon>
                 </v-btn>
                 </template>
-                <span>删除角色</span>
+                <span>删除当前角色</span>
               </v-tooltip>
             </v-col>
             <v-col cols="6" lg="4">
@@ -96,9 +96,6 @@ export default {
   components: {
   },
   methods: {
-    changeCurrentCharacter: function() {
-      this.$store.commit('changeCurrentCharacter', this.characterSelection.key)
-    },
     removeCharacter: function() {
       if (this.characterList.length>=2) {
         this.$store.commit('removeCharacter', this.characterSelection.key)
@@ -124,7 +121,7 @@ export default {
       var x = []
       for (var i in this.$store.state.characterDatas.characters) {
         x.push({
-          state: i.toString()+' : ' +this.$store.state.characterDatas.characters[i].name.value,
+          state: this.$store.state.characterDatas.characters[i].name.value,
           key: i
         })
       }
