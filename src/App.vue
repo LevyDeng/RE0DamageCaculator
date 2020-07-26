@@ -108,7 +108,7 @@ export default {
         cTemp[key].value = 0
       }
       cTemp.name.value = "新建用户"
-      cTemp.equiped_hearchines.value=[]
+      cTemp.equipedHearchines.value=[]
       this.$store.commit("addCharacter", cTemp)
     }
   },
