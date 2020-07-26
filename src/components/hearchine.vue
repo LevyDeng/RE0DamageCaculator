@@ -3,16 +3,17 @@
     <v-form v-model="valid">
       <v-row dense>
         <v-col cols="2">
-          <v-checkbox :checked="hearchineDatas.hearchines[hearchineID].checked.value"
-          :disabled="hearchineDatas.hearchines[hearchineID].disabled.value"
+          <v-checkbox 
+          v-model="checked"
+          :disabled="$store.state.hearchineDatas.hearchines[hearchineID].disabled.value"
           @change="checkChanged"></v-checkbox>
         </v-col>
         <v-col cols="6">
-          <v-text-field label="名字" v-model="name.value"
+          <v-text-field label="名字" v-model="hearchineData.name.value"
           ></v-text-field>
         </v-col>
         <v-col cols="3" >
-          <v-text-field label="攻击力" v-model="attack.value" :rules="pureNumberRules"></v-text-field>
+          <v-text-field label="攻击力" v-model="hearchineData.attack.value" :rules="pureNumberRules"></v-text-field>
         </v-col>
       </v-row>
       <!-- 心之器属性 -->
@@ -99,11 +100,7 @@ export default {
   data() {
     return {
       valid: true,
-      checked: false,
-      name: {
-        value: this.$store.state.hearchineDatas.hearchines[this.hearchineID].name.value},
-      attack: {
-        value: this.$store.state.hearchineDatas.hearchines[this.hearchineID].attack.value},
+      checked: this.$store.state.hearchineDatas.hearchines[this.hearchineID].checked.value,
       pureNumberRules: this.rules.pureNumberRules,
       calcInput: this.tools.calcInput,
       flag: 0
@@ -113,6 +110,9 @@ export default {
     hearchineID: String
   },
   computed: {
+    hearchineData() {
+      return this.$store.state.hearchineDatas.hearchines[this.hearchineID]
+    },
     propertySelection() {
       var pList = Object.keys(this.$store.state.hearchineDatas.hearchines[this.hearchineID].dynamicProperties)
       var selections = []
@@ -131,7 +131,12 @@ export default {
   },
   methods: {
     checkChanged: function() {
-      this.checked=!this.checked
+      if (this.checked==true) {
+        this.$store.commit('equipHearchine', this.hearchineID)
+      } else {
+        this.$store.commit('unEquipHearchine', this.hearchineID)
+      }
+      this.$store.commit('checkHearchineDisabled')
     },
     removeProperty: function(k) {
       this.propertySelection.splice(k,1)
@@ -149,14 +154,20 @@ export default {
       this.$store.commit('removeHearchine', this.hearchineID)
     },
     saveHearchine: function() {
-      var data = {
-        disabled: {value:this.disabled},
-        checked: {value:this.checked},
-        name: {
-          
+      if (this.valid==true) {
+        var dp = {}
+        for (var i in this.propertySelection) {
+          dp[this.propertySelection[i].key]={
+            label: this.propertySelection[i].label,
+            value: this.propertySelection[i].value,
+            valueType: "number"
+          }
         }
+        var hd = JSON.parse(JSON.stringify(this.hearchineData))
+        hd.dynamicProperties=dp
+        this.$store.commit('saveHearchine', {id:this.hearchineID, 
+        data:hd})
       }
-      this.$store.commit('saveHearchine')
     }
   }
 }

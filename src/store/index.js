@@ -56,7 +56,7 @@ export default new Vuex.Store({
       },
       characters: {
         '0': {
-          equiped_hearchines: {
+          equipedHearchines: {
             value: []
           },
           name: {
@@ -121,7 +121,7 @@ export default new Vuex.Store({
           },
         },
         '1': {
-          equiped_hearchines: {
+          equipedHearchines: {
           value: []
           },
           name: {
@@ -314,11 +314,35 @@ export default new Vuex.Store({
     },
     addHearchine: function(state) {
       var newH = JSON.parse(JSON.stringify(state.hearchineDatas.hearchineModel))
+      if (state.characterDatas.characters[state.characterDatas.currentCharacterID].equipedHearchines.value.length==3) {
+        newH.disabled.value=true
+      }
       Vue.set(state.hearchineDatas.hearchines, (state.hearchineDatas.currentMaxID+1).toString() , newH)
       Vue.set(state.hearchineDatas, 'currentMaxID', state.hearchineDatas.currentMaxID+1)
     },
-    saveHearchine: function(state) {
-      return state
+    saveHearchine: function(state, payload) {
+      Vue.set(state.hearchineDatas.hearchines, payload.id, payload.data)
+    },
+    equipHearchine: function(state, hID) {
+      state.characterDatas.characters[state.currentCharacterID].equipedHearchines.value.push(hID)
+      state.hearchineDatas.hearchines[hID].checked.value=true
+    },
+    unEquipHearchine: function(state, hID) {
+      state.characterDatas.characters[state.currentCharacterID].equipedHearchines.value.splice(state.characterDatas.characters[state.currentCharacterID].equipedHearchines.value.indexOf(hID), 1)
+      state.hearchineDatas.hearchines[hID].checked.value=false
+    },
+    checkHearchineDisabled: function(state) {
+      if (state.characterDatas.characters[state.currentCharacterID].equipedHearchines.value.length==3) {
+        for (var k in state.hearchineDatas.hearchines) {
+          if (state.hearchineDatas.hearchines[k].checked.value==false){
+            state.hearchineDatas.hearchines[k].disabled.value=true
+          }
+        }
+      } else if (state.characterDatas.characters[state.currentCharacterID].equipedHearchines.value.length==2) {
+        for (k in state.hearchineDatas.hearchines) {
+          state.hearchineDatas.hearchines[k].disabled.value=false
+        }
+      }
     },
     characterSelection: function(state, cs) {
       Vue.set(state.characterDatas,'characterSelection', cs)
