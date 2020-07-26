@@ -227,12 +227,7 @@ export default new Vuex.Store({
           key: 'epmty'
         }
       ],
-      currentMaxID: 0,
-      hearchines: [
-      {
-        id: {
-          value: 0
-        },
+      hearchineModel: {
         disabled: {
           value: false
         },
@@ -241,31 +236,70 @@ export default new Vuex.Store({
         },
         name: {
           label: "名称",
-          value: "从天而降的美好祝福",
+          value: "新建心之器",
           valueType: "string"
         },
         attack: {
           label: "攻击力",
-          value: '304',
+          value: '0',
           valueType: "number"
         },
-        attack_percentage: {
-          label: "基础攻击",
-          value: '12%',
-          valueType: "number"
-        },
-        crit_p: {
-          label: "暴击几率",
-          value: '18%',
-          valueType: "number"
-        },
-        armor_ignore: {
-          label: "防御忽视",
-          value: '15%',
-          valueType: "number"
+        dynamicProperties: {
+          attack_percentage: {
+            label: "基础攻击",
+            value: '0',
+            valueType: "number"
+          },
+          crit_p: {
+            label: "暴击几率",
+            value: '0',
+            valueType: "number"
+          },
+          armor_ignore: {
+            label: "暴击伤害",
+            value: '0',
+            valueType: "number"
+          }
+        }
+      },
+      currentMaxID: 0,
+      hearchines: {
+        '0': {
+          disabled: {
+            value: false
+          },
+          checked: {
+            value: false
+          },
+          name: {
+            label: "名称",
+            value: "从天而降的美好祝福",
+            valueType: "string"
+          },
+          attack: {
+            label: "攻击力",
+            value: '304',
+            valueType: "number"
+          },
+          dynamicProperties: {
+            attack_percentage: {
+              label: "基础攻击",
+              value: '12%',
+              valueType: "number"
+            },
+            crit_p: {
+              label: "暴击几率",
+              value: '18%',
+              valueType: "number"
+            },
+            armor_ignore: {
+              label: "防御忽视",
+              value: '15%',
+              valueType: "number"
+            }
+          }
         }
       }
-      ]
     },
     magichineDatas: {
 
@@ -276,7 +310,15 @@ export default new Vuex.Store({
       state[d.module+"Datas"][d.module+"s"][d.id][d.key].value=d.value
     },
     removeHearchine: function(state, hID) {
-      state.hearchineDatas.hearchines.splice(hID,1)
+      Vue.delete(state.hearchineDatas.hearchines, hID)
+    },
+    addHearchine: function(state) {
+      var newH = JSON.parse(JSON.stringify(state.hearchineDatas.hearchineModel))
+      Vue.set(state.hearchineDatas.hearchines, (state.hearchineDatas.currentMaxID+1).toString() , newH)
+      Vue.set(state.hearchineDatas, 'currentMaxID', state.hearchineDatas.currentMaxID+1)
+    },
+    saveHearchine: function(state) {
+      return state
     },
     characterSelection: function(state, cs) {
       Vue.set(state.characterDatas,'characterSelection', cs)

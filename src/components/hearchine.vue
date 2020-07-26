@@ -84,7 +84,7 @@
           </v-btn>
         </v-col>
         <v-col>
-          <v-btn class="ma-2" outlined color="green">保存</v-btn>
+          <v-btn class="ma-2" outlined color="green" @click="saveHearchine">保存</v-btn>
         </v-col>
       </v-row>
     </v-form>
@@ -110,21 +110,17 @@ export default {
     }
   },
   props: {
-    hearchineID: Number
+    hearchineID: String
   },
   computed: {
     propertySelection() {
-      var pList = Object.keys(this.$store.state.hearchineDatas.hearchines[this.hearchineID])
-      var exceptList = ['id', 'name','attack','checked','disabled']
-      for (var i in exceptList) {
-        pList.splice(pList.indexOf(exceptList[i]),1)
-      }
+      var pList = Object.keys(this.$store.state.hearchineDatas.hearchines[this.hearchineID].dynamicProperties)
       var selections = []
       for (var k in pList) {
         selections.push({
           key: pList[k],
-          label: this.$store.state.hearchineDatas.hearchines[this.hearchineID][pList[k]].label,
-          value: this.$store.state.hearchineDatas.hearchines[this.hearchineID][pList[k]].value
+          label: this.$store.state.hearchineDatas.hearchines[this.hearchineID].dynamicProperties[pList[k]].label,
+          value: this.$store.state.hearchineDatas.hearchines[this.hearchineID].dynamicProperties[pList[k]].value
         })
       }
       return selections
@@ -151,6 +147,16 @@ export default {
     },
     removeSelf: function() {
       this.$store.commit('removeHearchine', this.hearchineID)
+    },
+    saveHearchine: function() {
+      var data = {
+        disabled: {value:this.disabled},
+        checked: {value:this.checked},
+        name: {
+          
+        }
+      }
+      this.$store.commit('saveHearchine')
     }
   }
 }
