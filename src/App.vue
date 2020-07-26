@@ -47,7 +47,7 @@
               <v-select 
               ref="characterSelect"
               :items="characterList"
-              :label="$store.state.characterDatas.characters[characterSelection.seq].name.value"
+              :label="$store.state.characterDatas.characters[characterSelection.key].name.value"
               filled
               v-model="characterSelection"
               item-text="state"
@@ -102,18 +102,13 @@ export default {
     },
     removeCharacter: function() {
       if (this.characterList.length>=2) {
-        this.$store.commit('removeCharacter', this.characterSelection.seq)
+        this.$store.commit('removeCharacter', this.characterSelection.key)
       }
     }
   },
   data() {
     return {
     shown: null,
-    characterSelection: {
-      state: this.$store.state.characterDatas.characters[0].name.value,
-      key: this.$store.state.currentCharacterID,
-      seq: 0
-    },
   }},
   computed: {
     characterList: function() {
@@ -122,11 +117,19 @@ export default {
         x.push({
           state: i.toString()+' : ' +this.$store.state.characterDatas.characters[i].name.value,
           seq: Number(i),
-          key: this.$store.state.characterDatas.characters[i].id.value}
-        )
+          key: i
+        })
       }
       return x
     },
+    characterSelection: function() {
+      var cList = Object.keys(this.$store.state.characterDatas.characters)
+      return {
+        state: this.$store.state.characterDatas.characters[cList[0]].name.value,
+        key: cList[0],
+        seq: 0
+      }
+    }
   },
   created: function() {
     /*

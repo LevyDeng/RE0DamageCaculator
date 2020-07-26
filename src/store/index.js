@@ -38,7 +38,7 @@ export default new Vuex.Store({
       'skill_ub':0,
       'skill_ub_pro':0
     },
-    currentCharacterID: 0,
+    currentCharacterID: '0',
     characterDatas: {
       currentMaxID: 0,
       tips: {
@@ -47,11 +47,8 @@ export default new Vuex.Store({
         attack_percentage: "额外的百分比攻击力加成,如微精灵,潜能等",
         skill_ub_pro: "指心之器以外的必杀技加成,比如微精灵"
       },
-      characters: [
-      {
-        id: {
-          value: 0
-        },
+      characters: {
+      '0': {
         name: {
           label: "名字",
           value: "惠惠"
@@ -113,10 +110,7 @@ export default new Vuex.Store({
           value: '18%'
         }
       },
-      {
-        id: {
-          value: 1
-        },
+      '1': {
         name: {
           label: "名字",
           value: "阿库娅"
@@ -178,7 +172,7 @@ export default new Vuex.Store({
           value: '0%'
         }
       },
-      ]
+      }
     },
     hearchineDatas: {
       checkedHearchineIDs: [],
@@ -275,8 +269,8 @@ export default new Vuex.Store({
       state.currentCharacterID=id
     },
     removeCharacter: function(state, id) {
-      state.characterDatas.characters.splice(id,1)
-      state.currentCharacterID=0
+      Vue.delete(state.characterDatas.characters,id)
+      state.currentCharacterID=Object.keys(state.characterDatas.characters)[0]
     }
   },
   actions: {
