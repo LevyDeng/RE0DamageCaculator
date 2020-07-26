@@ -54,7 +54,6 @@
               item-value="key"
               return-object
               single-line
-              @change="changeCurrentCharacter"
               >
               </v-select>
             </v-col>
@@ -104,11 +103,21 @@ export default {
       if (this.characterList.length>=2) {
         this.$store.commit('removeCharacter', this.characterSelection.key)
       }
+    },
+    addCharacter: function() {
+      var cList = Object.keys(this.$store.state.characterDatas.characters)
+      var cTemp = JSON.parse(JSON.stringify(this.$store.state.characterDatas.characters[cList[0]]))
+      for (var key in cTemp) {
+        cTemp[key].value = 0
+      }
+      cTemp.name.value = "新建用户"
+      cTemp.equiped_hearchines.value=[]
+      this.$store.commit("addCharacter", cTemp)
     }
   },
   data() {
     return {
-    shown: null,
+    shown: null
   }},
   computed: {
     characterList: function() {
@@ -116,20 +125,19 @@ export default {
       for (var i in this.$store.state.characterDatas.characters) {
         x.push({
           state: i.toString()+' : ' +this.$store.state.characterDatas.characters[i].name.value,
-          seq: Number(i),
           key: i
         })
       }
       return x
     },
-    characterSelection: function() {
-      var cList = Object.keys(this.$store.state.characterDatas.characters)
-      return {
-        state: this.$store.state.characterDatas.characters[cList[0]].name.value,
-        key: cList[0],
-        seq: 0
+    characterSelection: {
+      get() {
+        return this.$store.state.characterDatas.characterSelection
+      },
+      set (value) {
+        this.$store.commit('characterSelection', value)
       }
-    }
+    },
   },
   created: function() {
     /*

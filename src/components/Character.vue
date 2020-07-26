@@ -9,19 +9,19 @@
             <v-row>
               <v-col cols="8">
                 <v-text-field
-                  label="名字" :value="characterDatas.characters[currentCharacterID].name.value"
+                  label="名字" :value="characterDatas.characters[characterSelection.key].name.value"
                   @input="saveInput('name', $event)"
                   >
                 </v-text-field>
               </v-col>
-              <v-col v-for="key in numberInputs" 
-              :key=key.id 
+              <v-col v-for="(value,key) in numberInputs" 
+              :key=key 
               cols="6">
               <!-- 输入框 -->
               <v-text-field 
                 @change="saveInput(key, $event)"
-                :label='characterDatas.characters[currentCharacterID][key].label'
-                :value="characterDatas.characters[currentCharacterID][key].value"
+                :label="value"
+                :value="characterDatas.characters[characterSelection.key][key].value"
                 :rules="numberRules"
                 :hint="hints[key]"
                 persistent-hint>
@@ -72,11 +72,11 @@ export default {
     currentCharacterID: function() {
       return this.$store.state.currentCharacterID
     },
+    characterSelection: function() {
+      return this.$store.state.characterDatas.characterSelection
+    },
     numberInputs: function() {
-      var l = Object.keys(this.$store.state.characterDatas.characters[this.currentCharacterID])
-      l.splice(l.indexOf('name'),1)
-      l.splice(l.indexOf('id'),1)
-      return l
+      return this.$store.state.characterDatas.numberInputs
     },
     ...mapState([
       'characterDatas'
@@ -85,7 +85,6 @@ export default {
   methods: {
     changeCurrentID: function() {
       console.log(this.$refs.characterSelection.label)
-      this.currentCharacterID=this.$refs.characterSelection.value
     },
     saveInput: function(key, e) {
       var inputValue = e.toString()
@@ -99,10 +98,10 @@ export default {
         this.hints[key]=res.toString()
       }
       //保存数据到store
-      this.characterDatas.characters[this.currentCharacterID][key].value=inputValue
+      //this.characterDatas.characters[this.$store.state.currentCharacterID][key].value=inputValue
       this.$store.commit("save",{
         module: "character",
-        id:this.currentCharacterID,
+        id:this.characterSelection.key,
         key: key,
         value: inputValue
       })
