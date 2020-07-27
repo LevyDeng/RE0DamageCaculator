@@ -89,7 +89,9 @@
         </v-col>
       </v-row>
     </v-form>
+    
   </v-card>
+  
 </template>
 
 <script>
@@ -102,7 +104,8 @@ export default {
       valid: true,
       pureNumberRules: this.rules.pureNumberRules,
       calcInput: this.tools.calcInput,
-      flag: 0
+      flag: 0,
+      snackbar: false
     }
   },
   props: {
@@ -200,6 +203,7 @@ export default {
         this.$store.commit('saveHearchine', {id:this.hearchineID, 
         data:hd})
       }
+      this.snackbar=true
     }
   }
 }
