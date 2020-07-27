@@ -71,7 +71,7 @@
                   <v-icon color="green">mdi-plus</v-icon>
                 </v-btn>
                 </template>
-                <span>添加角色</span>
+                <span>新建角色</span>
               </v-tooltip>
             </v-col>
           </v-row>
@@ -80,8 +80,8 @@
       <v-container >
         <v-tabs background-color="brown lighten-4" align-with-title>
           <v-tab to="/character">角色面板</v-tab>
-          <v-tab to="/magichines">魔法器</v-tab>
           <v-tab to="/hearchines">心之器</v-tab>
+          <v-tab to="/magichines">魔法器</v-tab>
         </v-tabs>
         <router-view></router-view>
       </v-container>
@@ -102,14 +102,7 @@ export default {
       }
     },
     addCharacter: function() {
-      var cList = Object.keys(this.$store.state.characterDatas.characters)
-      var cTemp = JSON.parse(JSON.stringify(this.$store.state.characterDatas.characters[cList[0]]))
-      for (var key in cTemp) {
-        cTemp[key].value = 0
-      }
-      cTemp.name.value = "新建用户"
-      cTemp.equipedHearchines.value=[]
-      this.$store.commit("addCharacter", cTemp)
+      this.$store.commit("addCharacter")
     }
   },
   data() {

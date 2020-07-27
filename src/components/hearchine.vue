@@ -1,5 +1,5 @@
 <template>
-  <v-card color="orange lighten-5">
+  <v-card color="grey lighten-2">
     <v-form v-model="valid">
       <v-row dense>
         <v-col cols="2">
@@ -48,7 +48,7 @@
                 item-text="label"
                 item-value="key"
                 return-object
-                single-line>
+                single-line filled>
               </v-select>
             </v-col>
             <v-col cols="3">
@@ -166,7 +166,6 @@ export default {
       } else {
         this.$store.commit('unEquipHearchine', this.hearchineID)
       }
-      //this.$store.commit('checkHearchineDisabled')
     },
     removeProperty: function(k) {
       this.propertySelection.splice(k,1)

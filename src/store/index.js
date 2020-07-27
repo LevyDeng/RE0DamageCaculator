@@ -59,6 +59,45 @@ export default new Vuex.Store({
           equipedHearchines: {
             value: []
           },
+          magichineSelection: {
+            name: "骰子",
+            key: '0'
+          },
+          magichineMaxID: {
+            value: 0
+          },
+          magichines: {
+            '0': {
+              name: "骰子",
+              numberProperties: {
+                attack: {
+                  label: "攻击力",
+                  value: 300,
+                  valueType: "number"
+                },
+                crit_p: {
+                  label: "暴击率",
+                  value: '23.5%'
+                },
+                crit_d: {
+                  label: "暴击伤害",
+                  value: '50%'
+                },
+                combo_p: {
+                  label: "连击率",
+                  value: '22%'
+                },
+                combo_d: {
+                  label: "连击伤害",
+                  value: '3%'
+                },
+                damage: {
+                  label: "伤害加成",
+                  value: '20%'
+                }
+              }
+            }
+          },
           name: {
             label: "名字",
             value: "惠惠"
@@ -123,6 +162,15 @@ export default new Vuex.Store({
         '1': {
           equipedHearchines: {
           value: []
+          },
+          magichineSelection: {
+
+          },
+          magichineMaxID: {
+            value: -1
+          },
+          magichines: {
+
           },
           name: {
             label: "名字",
@@ -301,8 +349,35 @@ export default new Vuex.Store({
         }
       }
     },
-    magichineDatas: {
-
+    magichineModel: {
+      name: "新建魔法器",
+      numberProperties: {
+        attack: {
+          label: "攻击力",
+          value: 0,
+          valueType: "number"
+        },
+        crit_p: {
+          label: "暴击率",
+          value: '0%'
+        },
+        crit_d: {
+          label: "暴击伤害",
+          value: '0%'
+        },
+        combo_p: {
+          label: "连击率",
+          value: '0%'
+        },
+        combo_d: {
+          label: "连击伤害",
+          value: '0%'
+        },
+        damage: {
+          label: "伤害加成",
+          value: '0%'
+        }
+      }
     }
   },
   mutations: {
@@ -331,19 +406,6 @@ export default new Vuex.Store({
       state.characterDatas.characters[state.characterDatas.characterSelection.key].equipedHearchines.value.splice(state.characterDatas.characters[state.characterDatas.characterSelection.key].equipedHearchines.value.indexOf(hID), 1)
       //state.hearchineDatas.hearchines[hID].checked.value=false
     },
-    checkHearchineDisabled: function(state) {
-      if (state.characterDatas.characters[state.characterDatas.characterSelection.key].equipedHearchines.value.length==3) {
-        for (var k in state.hearchineDatas.hearchines) {
-          if (state.hearchineDatas.hearchines[k].checked.value==false){
-            state.hearchineDatas.hearchines[k].disabled.value=true
-          }
-        }
-      } else if (state.characterDatas.characters[state.characterDatas.characterSelection.key].equipedHearchines.value.length==2) {
-        for (k in state.hearchineDatas.hearchines) {
-          state.hearchineDatas.hearchines[k].disabled.value=false
-        }
-      }
-    },
     characterSelection: function(state, cs) {
       Vue.set(state.characterDatas,'characterSelection', cs)
     },
@@ -357,18 +419,64 @@ export default new Vuex.Store({
       }
       Vue.set(state.characterDatas, 'characterSelection', cs)
     },
-    addCharacter: function(state, characterData) {
+    addCharacter: function(state) {
+      //初始化新角色数据
+      var cList = Object.keys(state.characterDatas.characters)
+      var cTemp = JSON.parse(JSON.stringify(state.characterDatas.characters[cList[0]]))
+      for (var key in cTemp) {
+        cTemp[key].value = 0
+      }
+      cTemp.name.value = "新建用户"
+      cTemp.equipedHearchines.value=[]
+      cTemp.magichines={}
+      cTemp.magichineSelection={}
+      cTemp.magichineMaxID={
+        value:-1
+      }
       // 添加角色
       var newKey = (state.currentMaxID+1).toString()
-      Vue.set(state.characterDatas.characters, newKey, characterData
+      Vue.set(state.characterDatas.characters, newKey, cTemp
       )
       state.currentMaxID += 1
       //修改当前选中的用户
       var cs = {
-        state: characterData.name.value,
+        state: cTemp.name.value,
         key: newKey
       }
       Vue.set(state.characterDatas, 'characterSelection', cs)
+    },
+    magichineSelection: function(state, ms) {
+      Vue.set(state.characterDatas.characters[state.characterDatas.characterSelection.key],'magichineSelection', ms)
+    },
+    addMagichine: function(state) {
+      var cID = state.characterDatas.characterSelection.key
+      var mTemp = JSON.parse(JSON.stringify(state.magichineModel))
+      Vue.set(state.characterDatas.characters[cID].magichines,(state.characterDatas.characters[cID].magichineMaxID.value+1).toString(), mTemp)
+      state.characterDatas.characters[cID].magichineMaxID.value += 1
+      Vue.set(state.characterDatas.characters[cID],'magichineSelection', {
+        name: "新建魔法器",
+        key: state.characterDatas.characters[cID].magichineMaxID.value.toString()
+      })
+    },
+    removeMagichine: function(state) {
+      var cID = state.characterDatas.characterSelection.key
+      var mID = state.characterDatas.characters[cID].magichineSelection.key
+      Vue.delete(state.characterDatas.characters[cID].magichines, mID)
+      var newID = Object.keys(state.characterDatas.characters[cID].magichines).reverse()[0]
+      Vue.set(state.characterDatas.characters[cID], 'magichineSelection', {
+        name: state.characterDatas.characters[cID].magichines[newID].name,
+        key: newID
+      })
+    },
+    saveMagichineName: function(state, name) {
+      var cID = state.characterDatas.characterSelection.key
+      var mID = state.characterDatas.characters[cID].magichineSelection.key
+      Vue.set(state.characterDatas.characters[cID].magichines[mID], 'name', name)
+    },
+    saveMagichineData: function(state, payload) {
+      var cID = state.characterDatas.characterSelection.key
+      var mID = state.characterDatas.characters[cID].magichineSelection.key
+      Vue.set(state.characterDatas.characters[cID].magichines[mID].numberProperties[payload.key], 'value', payload.value)
     }
   },
   actions: {

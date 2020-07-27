@@ -69,9 +69,6 @@ export default {
   },
   computed: 
   {
-    currentCharacterID: function() {
-      return this.$store.state.currentCharacterID
-    },
     characterSelection: function() {
       return this.$store.state.characterDatas.characterSelection
     },
