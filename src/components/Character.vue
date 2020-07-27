@@ -44,7 +44,7 @@
       </v-col>
       <!-- 显示角色最终数据 -->
       <v-col xs="12" sm="6" mid="6" lg="4">
-        <v-row>
+      <v-row>
         <v-subheader>角色最终数据</v-subheader>
         <v-col class="grey lighten-3" cols="11" dense>
           <v-row dense>
@@ -67,6 +67,21 @@
         </v-row>
       </v-col>
     </v-row>
+    <v-row>
+      <v-spacer></v-spacer>
+      <v-card class="mx-auto" color="blue lighten-4">
+        <v-card-title><div class="font-weight-black">属性权重:</div><div class="font-weight-light font-italic">(当前每增加一单位属性所提升的总伤害,仅供参考)</div></v-card-title>
+        <v-sparkline
+        :labels="sparklineValues[0]"
+        :value="sparklineValues[1]"
+        type="bar"
+        autoLineWidth
+        padding="8"
+        :gradient="gradient"
+        auto-draw>
+        </v-sparkline>
+      </v-card>
+    </v-row>
   </v-main>
 </template>
 
@@ -81,7 +96,8 @@ export default {
       calcInput: this.tools.calcInput,
       hints: {
       },
-      diceEnabled: false
+      diceEnabled: false,
+      gradient: ['red', 'orange', 'yellow']
     }
   },
   computed: 
@@ -151,7 +167,27 @@ export default {
       return finalDatas
     },
     finalDamage: function() {
-      return (this.finalDatas.attack.value*(1+this.finalDatas.damage.value)*Math.min((this.calcInput(this.characterDatas.characters[this.characterSelection.key].anger.value)+1000),3000)/2000*(1+this.finalDatas.skill_ub_pro.value)*this.calcInput(this.characterDatas.characters[this.characterSelection.key].conti.value)*this.calcInput(this.characterDatas.characters[this.characterSelection.key].skill_ub.value)*(1+Math.max(this.finalDatas.crit_p.value,1)*(this.finalDatas.crit_d.value-1)+10*Math.max(this.finalDatas.combo_p.value,1)*this.finalDatas.combo_d.value)*375/(375+this.calcInput(this.characterDatas.characters[this.characterSelection.key].enemy_armor.value)*(1-Math.min(this.finalDatas.armor_ignore.value,1)))*this.diceDamage).toFixed(4)
+      return this.calcDamage(this.finalDatas)
+      //return (this.finalDatas.attack.value*(1+this.finalDatas.damage.value)*Math.min((this.calcInput(this.characterDatas.characters[this.characterSelection.key].anger.value)+1000),3000)/2000*(1+this.finalDatas.skill_ub_pro.value)*this.calcInput(this.characterDatas.characters[this.characterSelection.key].conti.value)*this.calcInput(this.characterDatas.characters[this.characterSelection.key].skill_ub.value)*(1+Math.max(this.finalDatas.crit_p.value,1)*(this.finalDatas.crit_d.value-1)+10*Math.max(this.finalDatas.combo_p.value,1)*this.finalDatas.combo_d.value)*375/(375+this.calcInput(this.characterDatas.characters[this.characterSelection.key].enemy_armor.value)*(1-Math.min(this.finalDatas.armor_ignore.value,1)))*this.diceDamage).toFixed(4)
+    },
+    sparklineValues: function() {
+      var labels = [ '攻击力加成', '暴击率', '暴击伤害', '连击率', '连击伤害', '伤害加成']
+      var keys = ['crit_p', 'crit_d', 'combo_p', 'combo_d', 'damage']
+      var values = []
+      var increases = [0.12, 0.2, 0.12, 0.02, 0.08]
+      var finalDatasDup = JSON.parse(JSON.stringify(this.finalDatas))
+      //攻击力
+      finalDatasDup.attack.value += this.calcInput((this.characterDatas.characters[this.characterDatas.characterSelection.key].attack_base.value))*0.1
+      values.push(this.calcDamage(finalDatasDup)-this.finalDamage)
+      finalDatasDup.attack.value  -= this.calcInput((this.characterDatas.characters[this.characterDatas.characterSelection.key].attack_base.value))*0.1
+      //其他
+      for (var i in keys) {
+        finalDatasDup[keys[i]].value += increases[i]
+        values.push(this.calcDamage(finalDatasDup)-this.finalDamage)
+        finalDatasDup[keys[i]].value -= increases[i]
+      }
+
+      return [labels, values]
     },
     ...mapState([
       'characterDatas'
@@ -177,6 +213,9 @@ export default {
         key: key,
         value: inputValue
       })
+    },
+    calcDamage: function(data) {
+      return (data.attack.value*(1+data.damage.value)*Math.min((this.calcInput(this.characterDatas.characters[this.characterSelection.key].anger.value)+1000),3000)/2000*(1+data.skill_ub_pro.value)*this.calcInput(this.characterDatas.characters[this.characterSelection.key].conti.value)*this.calcInput(this.characterDatas.characters[this.characterSelection.key].skill_ub.value)*(1+Math.min(data.crit_p.value,1)*(data.crit_d.value-1)+10*Math.min(data.combo_p.value,1)*data.combo_d.value)*375/(375+this.calcInput(this.characterDatas.characters[this.characterSelection.key].enemy_armor.value)*(1-Math.min(data.armor_ignore.value,1)))*this.diceDamage).toFixed(4)
     }
   }
 }
