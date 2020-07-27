@@ -1,11 +1,11 @@
 <template>
   <v-main>
     <v-row dense>
-      <v-col xs="12" sm="6" mid="6" lg="4">
+      <v-col xs="12" sm="6" mid="6" lg="6">
         <v-row>
           <v-subheader>角色基础数据:</v-subheader>
           <!-- 角色基础数据输入框 -->
-          <v-col class="grey lighten-2" cols="11" dense offset="1">
+          <v-col class="grey lighten-2" cols="11" dense >
             <v-row dense>
               <v-col cols="8">
                 <v-text-field
@@ -44,11 +44,23 @@
       </v-col>
       <!-- 显示角色最终数据 -->
       <v-col xs="12" sm="6" mid="6" lg="4">
-        <v-item-group>
-          <v-list-item>
-            <v-subheader>角色最终数据</v-subheader>
-          </v-list-item>
-        </v-item-group>
+        <v-row>
+        <v-subheader>角色最终数据</v-subheader>
+        <v-col class="grey lighten-3" cols="11" dense>
+          <v-row dense>
+            <v-col cols="6" v-for="(v,k) in finalDatas" :key=k>
+              <v-text-field readonly
+              :value="k=='attack'?v.value:((v.value*100).toString()+'%')"
+              :label="v.label"></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              最终伤害:{{finalDamage}}
+            </v-col>
+          </v-row>
+        </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-main>
@@ -70,10 +82,58 @@ export default {
   computed: 
   {
     characterSelection: function() {
-      return this.$store.state.characterDatas.characterSelection
+      return this.characterDatas.characterSelection
     },
     numberInputs: function() {
-      return this.$store.state.characterDatas.numberInputs
+      return this.characterDatas.numberInputs
+    },
+    finalDatas: function() {
+      var cID = this.characterDatas.characterSelection.key
+      var finalKeys = {'crit_p':'暴击率', 'crit_d':'暴击伤害', 'combo_p':'连击率', 'combo_d':'连击伤害', 'damage':'伤害加成', 'armor_ignore':'防御忽视', 'skill_ub_pro':'必杀技伤害'}
+      var finalDatas = {}
+      //计算最终攻击力
+      finalDatas['attack']={
+        label: '攻击力',
+        value: 0
+      }
+      var equipedHearchineIDS = this.characterDatas.characters[cID].equipedHearchines.value
+      var attack_percentage = this.calcInput(this.characterDatas.characters[cID].attack_percentage.value)
+      for (var i in equipedHearchineIDS) {
+        finalDatas['attack'].value+=this.calcInput(this.$store.state.hearchineDatas.hearchines[equipedHearchineIDS[i]].attack.value)
+        if (Object.keys(this.$store.state.hearchineDatas.hearchines[equipedHearchineIDS[i]].dynamicProperties).indexOf('attack_percentage')!=-1) {
+          attack_percentage+=this.calcInput(this.$store.state.hearchineDatas.hearchines[equipedHearchineIDS[i]].dynamicProperties.attack_percentage.value)
+        }
+      }
+      finalDatas['attack'].value += this.calcInput(this.characterDatas.characters[cID].attack_solid.value)
+      finalDatas['attack'].value += this.calcInput(this.characterDatas.characters[cID].attack_base.value)*(1+attack_percentage)
+      if ('key' in this.characterDatas.characters[cID].magichineSelection) {
+        finalDatas['attack'].value += this.calcInput(this.characterDatas.characters[cID].magichines[this.characterDatas.characters[cID].magichineSelection.key].numberProperties.attack.value)
+      }
+      finalDatas['attack_percentage']={
+        label: '攻击力加成(百分比)',
+        value: attack_percentage
+      }
+      //计算其他属性
+      for (var k in finalKeys) {
+        var l = finalKeys[k]
+        finalDatas[k]={
+          label: l,
+          value: this.calcInput(this.characterDatas.characters[cID][k].value)
+        }
+        for (i in equipedHearchineIDS) {
+          for (var p in this.$store.state.hearchineDatas.hearchines[equipedHearchineIDS[i]].dynamicProperties) {
+            if (p==k) {
+              finalDatas[k].value += this.calcInput(this.$store.state.hearchineDatas.hearchines[equipedHearchineIDS[i]].dynamicProperties[k].value)
+            }
+          }
+        }
+      }
+
+      
+      return finalDatas
+    },
+    finalDamage: function() {
+      return this.finalDatas.attack.value*(1+this.finalDatas.damage.value)*Math.min((this.calcInput(this.characterDatas.characters[this.characterSelection.key].anger.value)+1000),3000)/2000*(1+this.finalDatas.skill_ub_pro.value)*this.calcInput(this.characterDatas.characters[this.characterSelection.key].conti.value)*this.calcInput(this.characterDatas.characters[this.characterSelection.key].skill_ub.value)*(1+Math.max(this.finalDatas.crit_p.value,1)*(this.finalDatas.crit_d.value-1)+10*Math.max(this.finalDatas.combo_p.value,1)*this.finalDatas.combo_d.value)*375/(375+this.calcInput(this.characterDatas.characters[this.characterSelection.key].enemy_armor.value)*Math.max(this.finalDatas.armor_ignore.value,1))
     },
     ...mapState([
       'characterDatas'

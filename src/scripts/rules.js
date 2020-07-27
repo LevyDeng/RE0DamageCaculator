@@ -1,4 +1,5 @@
 const numberRules = [
+  value => value!=undefined || '',
   value => (value || '').toString().length <= 255 || 'Max 255 characters',
   value => {
     const pa = /^\d+\.?\d*%?(\+\d+\.?\d*%?)*$/
@@ -7,6 +8,7 @@ const numberRules = [
 ]
 
 const pureNumberRules = [
+  value => value!=undefined || '',
   value => (value || '').toString().length <= 255 || 'Max 255 characters',
   value => {
     const pa = /^\d+\.?\d*%?$/
