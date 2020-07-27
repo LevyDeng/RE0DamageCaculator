@@ -50,7 +50,7 @@
           <v-row dense>
             <v-col cols="6" v-for="(v,k) in finalDatas" :key=k>
               <v-text-field readonly
-              :value="k=='attack'?v.value:((v.value*100).toString()+'%')"
+              :value="k=='attack'?v.value:((v.value*100).toFixed(2).toString()+'%')"
               :label="v.label"></v-text-field>
             </v-col>
           </v-row>
@@ -148,8 +148,6 @@ export default {
           }
         }
       }
-
-      
       return finalDatas
     },
     finalDamage: function() {

@@ -85,6 +85,11 @@
         </v-tabs>
         <router-view></router-view>
       </v-container>
+      <v-footer>
+        <v-row justify="center">
+          <strong>made by-</strong><a style="text-decoration:none;" href="https://github.com/LevyDeng/RE0DamageCaculator">ptrees</a>
+        </v-row>
+      </v-footer>
     </v-main>
   </v-app>
 </template>
