@@ -19,7 +19,7 @@
       <v-toolbar-title>RE0伤害计算器</v-toolbar-title>
     </v-app-bar>
     <v-main class="brown lighten-5">
-      <v-row dense>
+      <v-row justify="space-around" dense>
         <v-col cols="8" dense>
           <v-row align="start">
             <v-col cols="3" lg="2">
@@ -42,7 +42,7 @@
                 <span>删除当前角色</span>
               </v-tooltip>
             </v-col>
-            <v-col cols="6" lg="4">
+            <v-col cols="5" lg="3">
               
               <v-select 
               ref="characterSelect"
