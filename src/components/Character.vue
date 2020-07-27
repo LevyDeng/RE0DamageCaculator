@@ -55,8 +55,12 @@
             </v-col>
           </v-row>
           <v-row>
+            <v-col cols="12">
+              <v-checkbox v-model="diceEnabled"
+              label="骰子特效"></v-checkbox>
+            </v-col>
             <v-col>
-              最终伤害:{{finalDamage}}
+              最终伤害:<h1 class="red--text text--lighten-1">{{finalDamage}}</h1>
             </v-col>
           </v-row>
         </v-col>
@@ -77,6 +81,7 @@ export default {
       calcInput: this.tools.calcInput,
       hints: {
       },
+      diceEnabled: false
     }
   },
   computed: 
@@ -87,6 +92,13 @@ export default {
     numberInputs: function() {
       return this.characterDatas.numberInputs
     },
+    diceDamage: function() {
+      if (this.diceEnabled==true) {
+        return 1.3
+      } else {
+        return 1
+      }
+    },
     finalDatas: function() {
       var cID = this.characterDatas.characterSelection.key
       var finalKeys = {'crit_p':'暴击率', 'crit_d':'暴击伤害', 'combo_p':'连击率', 'combo_d':'连击伤害', 'damage':'伤害加成', 'armor_ignore':'防御忽视', 'skill_ub_pro':'必杀技伤害'}
@@ -96,12 +108,12 @@ export default {
         label: '攻击力',
         value: 0
       }
-      var equipedHearchineIDS = this.characterDatas.characters[cID].equipedHearchines.value
+      var equipedHearchineIDs = this.characterDatas.characters[cID].equipedHearchines.value
       var attack_percentage = this.calcInput(this.characterDatas.characters[cID].attack_percentage.value)
-      for (var i in equipedHearchineIDS) {
-        finalDatas['attack'].value+=this.calcInput(this.$store.state.hearchineDatas.hearchines[equipedHearchineIDS[i]].attack.value)
-        if (Object.keys(this.$store.state.hearchineDatas.hearchines[equipedHearchineIDS[i]].dynamicProperties).indexOf('attack_percentage')!=-1) {
-          attack_percentage+=this.calcInput(this.$store.state.hearchineDatas.hearchines[equipedHearchineIDS[i]].dynamicProperties.attack_percentage.value)
+      for (var i in equipedHearchineIDs) {
+        finalDatas['attack'].value+=this.calcInput(this.$store.state.hearchineDatas.hearchines[equipedHearchineIDs[i]].attack.value)
+        if (Object.keys(this.$store.state.hearchineDatas.hearchines[equipedHearchineIDs[i]].dynamicProperties).indexOf('attack_percentage')!=-1) {
+          attack_percentage+=this.calcInput(this.$store.state.hearchineDatas.hearchines[equipedHearchineIDs[i]].dynamicProperties.attack_percentage.value)
         }
       }
       finalDatas['attack'].value += this.calcInput(this.characterDatas.characters[cID].attack_solid.value)
@@ -120,11 +132,19 @@ export default {
           label: l,
           value: this.calcInput(this.characterDatas.characters[cID][k].value)
         }
-        for (i in equipedHearchineIDS) {
-          for (var p in this.$store.state.hearchineDatas.hearchines[equipedHearchineIDS[i]].dynamicProperties) {
+        //加上心之器数据
+        for (i in equipedHearchineIDs) {
+          for (var p in this.$store.state.hearchineDatas.hearchines[equipedHearchineIDs[i]].dynamicProperties) {
             if (p==k) {
-              finalDatas[k].value += this.calcInput(this.$store.state.hearchineDatas.hearchines[equipedHearchineIDS[i]].dynamicProperties[k].value)
+              finalDatas[k].value += this.calcInput(this.$store.state.hearchineDatas.hearchines[equipedHearchineIDs[i]].dynamicProperties[k].value)
             }
+          }
+        }
+        //加上魔法器数据
+        if ('key' in this.characterDatas.characters[cID].magichineSelection) {
+          if (k in this.characterDatas.characters[cID].magichines[this.characterDatas.characters[cID].magichineSelection.key].numberProperties) {
+          
+            finalDatas[k].value += this.calcInput(this.characterDatas.characters[cID].magichines[this.characterDatas.characters[cID].magichineSelection.key].numberProperties[k].value)
           }
         }
       }
@@ -133,7 +153,7 @@ export default {
       return finalDatas
     },
     finalDamage: function() {
-      return this.finalDatas.attack.value*(1+this.finalDatas.damage.value)*Math.min((this.calcInput(this.characterDatas.characters[this.characterSelection.key].anger.value)+1000),3000)/2000*(1+this.finalDatas.skill_ub_pro.value)*this.calcInput(this.characterDatas.characters[this.characterSelection.key].conti.value)*this.calcInput(this.characterDatas.characters[this.characterSelection.key].skill_ub.value)*(1+Math.max(this.finalDatas.crit_p.value,1)*(this.finalDatas.crit_d.value-1)+10*Math.max(this.finalDatas.combo_p.value,1)*this.finalDatas.combo_d.value)*375/(375+this.calcInput(this.characterDatas.characters[this.characterSelection.key].enemy_armor.value)*Math.max(this.finalDatas.armor_ignore.value,1))
+      return (this.finalDatas.attack.value*(1+this.finalDatas.damage.value)*Math.min((this.calcInput(this.characterDatas.characters[this.characterSelection.key].anger.value)+1000),3000)/2000*(1+this.finalDatas.skill_ub_pro.value)*this.calcInput(this.characterDatas.characters[this.characterSelection.key].conti.value)*this.calcInput(this.characterDatas.characters[this.characterSelection.key].skill_ub.value)*(1+Math.max(this.finalDatas.crit_p.value,1)*(this.finalDatas.crit_d.value-1)+10*Math.max(this.finalDatas.combo_p.value,1)*this.finalDatas.combo_d.value)*375/(375+this.calcInput(this.characterDatas.characters[this.characterSelection.key].enemy_armor.value)*(1-Math.min(this.finalDatas.armor_ignore.value,1)))*this.diceDamage).toFixed(4)
     },
     ...mapState([
       'characterDatas'
