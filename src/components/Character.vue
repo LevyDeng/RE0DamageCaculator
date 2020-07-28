@@ -215,7 +215,7 @@ export default {
       })
     },
     calcDamage: function(data) {
-      return (data.attack.value*(1+data.damage.value)*Math.min((this.calcInput(this.characterDatas.characters[this.characterSelection.key].anger.value)+1000),3000)/2000*(1+data.skill_ub_pro.value)*this.calcInput(this.characterDatas.characters[this.characterSelection.key].conti.value)*this.calcInput(this.characterDatas.characters[this.characterSelection.key].skill_ub.value)*(1+Math.min(data.crit_p.value,1)*(data.crit_d.value-1)+10*Math.min(data.combo_p.value,1)*data.combo_d.value)*375/(375+this.calcInput(this.characterDatas.characters[this.characterSelection.key].enemy_armor.value)*(1-Math.min(data.armor_ignore.value,1)))*this.diceDamage).toFixed(4)
+      return (data.attack.value*(1+data.damage.value)*Math.min((this.calcInput(this.characterDatas.characters[this.characterSelection.key].anger.value)+1000),3000)/2000*(1+data.skill_ub_pro.value)*this.calcInput(this.characterDatas.characters[this.characterSelection.key].conti.value)*this.calcInput(this.characterDatas.characters[this.characterSelection.key].skill_ub.value)*(1+Math.min(data.crit_p.value,1)*(data.crit_d.value-1)+Math.min(data.combo_p.value,1)*(data.combo_d.value)*10-1)*375/(375+this.calcInput(this.characterDatas.characters[this.characterSelection.key].enemy_armor.value)*(1-Math.min(data.armor_ignore.value,1)))*this.diceDamage).toFixed(4)
     }
   }
 }
